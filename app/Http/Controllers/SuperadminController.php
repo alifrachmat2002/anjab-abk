@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jabatan;
 use App\Models\JabatanTugasTambahan;
 use App\Models\JenisJabatan;
+use App\Models\UnitKerja;
 use App\Models\Unsur;
 use Illuminate\Http\Request;
 
@@ -83,4 +84,124 @@ class SuperadminController extends Controller
         return redirect()->route('admin.tugas-tambahan.index')->with('success', 'Tugas Tambahan berhasil dihapus');
     }
     // Controller for tugas tambahan end
+
+    // Controller for unsur start
+    public function unsurIndex()
+    {
+        $title = 'Dashboard Admin';
+        $unsurs = Unsur::all();
+
+        return view('admin.unsur.index', compact('title', 'unsurs'));
+    }
+
+    public function unsurCreate()
+    {
+        $title = 'Tambah Unsur';
+
+        return view('admin.unsur.create', compact('title'));
+    }
+
+    public function unsurStore(Request $request)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|min:3|max:255',
+        ]);
+        
+        Unsur::create([
+            'nama' => $validated['nama'],
+        ]);
+
+        return redirect()->route('admin.unsur.index')->with('success', 'Unsur ' . $validated['nama'] . ' berhasil ditambahkan');
+    }
+
+    public function unsurEdit(Unsur $unsur)
+    {
+        $title = 'Edit Unsur';
+        $unsur = Unsur::find($unsur->id);
+
+        return view('admin.unsur.edit', compact('title', 'unsur'));
+    }
+
+    public function unsurUpdate(Request $request, Unsur $unsur)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|min:3|max:255',
+        ]);
+
+        $unsur->update([
+            'nama' => $validated['nama'],
+        ]);
+
+        return redirect()->route('admin.unsur.index')->with('success', 'Unsur ' . $validated['nama'] . ' berhasil diubah');
+    }
+
+    public function unsurDestroy(Unsur $unsur)
+    {
+        $unsur->delete();
+
+        return redirect()->route('admin.unsur.index')->with('success', 'Unsur berhasil dihapus');
+    }
+    // Controller for unsur end
+
+    // Controller for unit kerja start
+    public function unitKerjaIndex()
+    {
+        $title = 'Dashboard Admin';
+        $unitKerjas = UnitKerja::all();
+
+        return view('admin.unit-kerja.index', compact('title', 'unitKerjas'));
+    }
+
+    public function unitKerjaCreate()
+    {
+        $title = 'Tambah Unit Kerja';
+        $unsurs = Unsur::all();
+
+        return view('admin.unit-kerja.create', compact('title', 'unsurs'));
+    }
+
+    public function unitKerjaStore(Request $request)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|min:3|max:255',
+            'unsur_id' => 'required',
+        ]);
+        
+        UnitKerja::create([
+            'nama' => $validated['nama'],
+            'unsur_id' => $validated['unsur_id'],
+        ]);
+
+        return redirect()->route('admin.unit-kerja.index')->with('success', 'Unit Kerja ' . $validated['nama'] . ' berhasil ditambahkan');
+    }
+
+    public function unitKerjaEdit(UnitKerja $unitKerja)
+    {
+        $title = 'Edit Unit Kerja';
+        $unsurs = Unsur::all();
+        $unitKerja = UnitKerja::with('unsur')->find($unitKerja->id);
+
+        return view('admin.unit-kerja.edit', compact('title', 'unitKerja', 'unsurs'));
+    }
+
+    public function unitKerjaUpdate(Request $request, UnitKerja $unitKerja)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|min:3|max:255',
+        ]);
+
+        $unitKerja->update([
+            'nama' => $validated['nama'],
+        ]);
+
+        return redirect()->route('admin.unit-kerja.index')->with('success', 'Unit Kerja ' . $validated['nama'] . ' berhasil diubah');
+    }
+
+    public function unitKerjaDestroy(UnitKerja $unitKerja)
+    {
+        $unitKerja->delete();
+
+        return redirect()->route('admin.unit-kerja.index')->with('success', 'Unit Kerja berhasil dihapus');
+    }
+    // Controller for unit kerja end
 }

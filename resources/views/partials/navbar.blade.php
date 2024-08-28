@@ -49,9 +49,9 @@
                                 Tambahan</a></li>
                         <li><a class="nav-link" href="{{ route('admin.jabatan.index') }}"><img data-feather="file"
                                     width="20px">Jabatan</a></li>
-                        <li><a class="nav-link" href=""><img data-feather="home" width="20px">Unsur</a>
+                        <li><a class="nav-link" href="{{ route('admin.unsur.index') }}"><img data-feather="home" width="20px">Unsur</a>
                         </li>
-                        <li><a class="nav-link" href=""><img data-feather="home" width="20px">Unit Kerja</a>
+                        <li><a class="nav-link" href="{{ route('admin.unit-kerja.index') }}"><img data-feather="home" width="20px">Unit Kerja</a>
                         </li>
                     @else
                         <li><a class="nav-link" href="/"><img data-feather="home" width="20px"> Dashboard</a>
