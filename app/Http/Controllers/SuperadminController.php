@@ -15,7 +15,7 @@ class SuperadminController extends Controller
     public function tugasTambahanIndex()
     {
         $title = 'Dashboard Admin';
-        $tutams = JabatanTugasTambahan::all();
+        $tutams = JabatanTugasTambahan::orderBy('nama')->get();
 
         return view('admin.tugas-tambahan.index', compact('title', 'tutams'));
     }
@@ -23,8 +23,8 @@ class SuperadminController extends Controller
     public function tugasTambahanCreate()
     {
         $title = 'Tambah Tugas Tambahan';
-        $unsurs = Unsur::all();
-        $jenisJabatans = JenisJabatan::all();
+        $unsurs = Unsur::orderBy('nama')->get();
+        $jenisJabatans = JenisJabatan::orderBy('nama')->get();
 
         return view('admin.tugas-tambahan.create', compact('title', 'unsurs', 'jenisJabatans'));
     }
@@ -51,8 +51,8 @@ class SuperadminController extends Controller
     public function tugasTambahanEdit(JabatanTugasTambahan $tugasTambahan)
     {
         $title = 'Edit Tugas Tambahan';
-        $unsurs = Unsur::all();
-        $jenisJabatans = JenisJabatan::all();
+        $unsurs = Unsur::orderBy('nama')->get();
+        $jenisJabatans = JenisJabatan::orderBy('nama')->get();
         $tugasTambahan = JabatanTugasTambahan::with('unsur', 'jenisJabatan')->find($tugasTambahan->id);
 
         return view('admin.tugas-tambahan.edit', compact('title', 'tugasTambahan', 'unsurs', 'jenisJabatans'));
@@ -89,7 +89,7 @@ class SuperadminController extends Controller
     public function unsurIndex()
     {
         $title = 'Dashboard Admin';
-        $unsurs = Unsur::all();
+        $unsurs = Unsur::orderBy('nama')->get();
 
         return view('admin.unsur.index', compact('title', 'unsurs'));
     }
@@ -147,7 +147,7 @@ class SuperadminController extends Controller
     public function unitKerjaIndex()
     {
         $title = 'Dashboard Admin';
-        $unitKerjas = UnitKerja::all();
+        $unitKerjas = UnitKerja::orderBy('nama')->get();
 
         return view('admin.unit-kerja.index', compact('title', 'unitKerjas'));
     }
@@ -155,7 +155,7 @@ class SuperadminController extends Controller
     public function unitKerjaCreate()
     {
         $title = 'Tambah Unit Kerja';
-        $unsurs = Unsur::all();
+        $unsurs = Unsur::orderBy('nama')->get();
 
         return view('admin.unit-kerja.create', compact('title', 'unsurs'));
     }
@@ -178,7 +178,7 @@ class SuperadminController extends Controller
     public function unitKerjaEdit(UnitKerja $unitKerja)
     {
         $title = 'Edit Unit Kerja';
-        $unsurs = Unsur::all();
+        $unsurs = Unsur::orderBy('nama')->get();
         $unitKerja = UnitKerja::with('unsur')->find($unitKerja->id);
 
         return view('admin.unit-kerja.edit', compact('title', 'unitKerja', 'unsurs'));
