@@ -306,7 +306,7 @@ class AbkController extends Controller
     {
         // When user accepts the ajuan, verification instance is created,
         // and is_approved in RoleVerifikasi is set to true
-
+        $userIsWakilRektor = auth()->user()->hasRole('Wakil Rektor 2');
         Verifikasi::create([
             'ajuan_id' => $abk->id,
             'user_id' => auth()->user()->id,
@@ -316,6 +316,10 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
+
+        if ($userIsWakilRektor) {
+            $abk->update(['is_approved' => true]);
+        }
 
         foreach ($abk->children as $child) {
             Verifikasi::create([
@@ -327,6 +331,10 @@ class AbkController extends Controller
             RoleVerifikasi::where('ajuan_id', $child->id)
                 ->where('role_id', auth()->user()->roles->first()->id)
                 ->update(['is_approved' => true]);
+
+            if ($userIsWakilRektor) {
+                $child->update(['is_approved' => true]);
+            }
         }
 
         return redirect()->route('abk.ajuans')->with('success', 'Verifikasi berhasil');
@@ -345,20 +353,19 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
-        
-            $abk_parent = $abk->parent;
-            if($abk_parent->approvedAbkCount() == $abk_parent->children->count()) {
-                Verifikasi::create([
-                    'ajuan_id' => $abk_parent->id,
-                    'user_id' => User::where('name','Superadmin')->first()->id,
-                    'is_approved' => true,
-                    'catatan' => null,
-                ]);
-                RoleVerifikasi::where('ajuan_id', $abk_parent->id)
-                    ->where('role_id', Role::where('name', 'Admin Kepegawaian')->first()->id)
-                    ->update(['is_approved' => false]);
-            }
-        
+
+        $abk_parent = $abk->parent;
+        if ($abk_parent->approvedAbkCount() == $abk_parent->children->count()) {
+            Verifikasi::create([
+                'ajuan_id' => $abk_parent->id,
+                'user_id' => User::where('name', 'Superadmin')->first()->id,
+                'is_approved' => true,
+                'catatan' => null,
+            ]);
+            RoleVerifikasi::where('ajuan_id', $abk_parent->id)
+                ->where('role_id', Role::where('name', 'Admin Kepegawaian')->first()->id)
+                ->update(['is_approved' => false]);
+        }
 
         return redirect()->route('abk.ajuans')->with('success', 'Verifikasi berhasil');
     }
@@ -410,8 +417,10 @@ class AbkController extends Controller
             ]);
         }
 
-        if(request()->has('abkparent')) {
-            return redirect()->route('abk.ajuan.show',['abk' => request('abkparent')])->with('success', 'Revisi berhasil');
+        if (request()->has('abkparent')) {
+            return redirect()
+                ->route('abk.ajuan.show', ['abk' => request('abkparent')])
+                ->with('success', 'Revisi berhasil');
         }
 
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
@@ -468,8 +477,9 @@ class AbkController extends Controller
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
     }
 
-    public function abkParentRevisi(Ajuan $abk) {
-        $previousVerificatorRoleId  = $abk->latest_verifikasi()->user->roles->first()->id;
+    public function abkParentRevisi(Ajuan $abk)
+    {
+        $previousVerificatorRoleId = $abk->latest_verifikasi()->user->roles->first()->id;
         $verifikasi = Verifikasi::create([
             'ajuan_id' => $abk->id,
             'user_id' => auth()->user()->id,
@@ -484,8 +494,6 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => false]);
-
-        
 
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
     }
