@@ -104,7 +104,7 @@ Route::prefix('/abk/ajuan')->name('abk.')->group(function () {
     Route::get('/{abk}/unit/{unit_kerja}/edit', [AbkController::class, 'editUnitKerja'])->name('unitkerja.edit');
     Route::post('/{abk}/abk-jabatan/store', [AbkController::class, 'storeAbkJabatan'])->name('abk-jabatan.store');
     Route::get('/{abk}/unit/{unit_kerja}/jabatan/{abk_jabatan}/edit', [AbkController::class, 'editJabatan'])->name('jabatan.edit');
-    Route::put('/{detail_abk}/store', [AbkController::class, 'storeDetailAbk'])->name('detail_abk.store');
+    Route::put('/{detail_abk}/{abk_jabatan}/store', [AbkController::class, 'storeDetailAbk'])->name('detail_abk.store');
     Route::post('/{abk}/update', [AbkController::class, 'updateAjuan'])->name('ajuan.update');
     Route::post('/abkjabatan/{abk_jabatan}/make-catatan',[AbkController::class,'abkMakeCatatan'])->name('jabatan.makecatatan');
     Route::post('/{abk}/revisi', [AbkController::class, 'abkRevisi'])->name('ajuan.revisi');

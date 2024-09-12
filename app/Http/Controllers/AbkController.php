@@ -257,11 +257,10 @@ class AbkController extends Controller
         $title = 'Lihat Informasi ABK';
         $jabatan = $abk_jabatan->jabatan;
         $detail_abk = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)->get();
-        $wpt = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)
-            ->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
-            ->value('total_value');
+        $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
+        $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'detail_abk', 'unit_kerja'));
+        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'kebutuhan_pegawai' ,'detail_abk', 'unit_kerja'));
     }
 
     public function editJabatan(Ajuan $abk, UnitKerja $unit_kerja, AbkJabatan $abk_jabatan)
@@ -269,19 +268,31 @@ class AbkController extends Controller
         $title = 'Edit Informasi ABK';
         $uraians = $abk_jabatan->jabatan->uraianTugas;
         $jabatan = $abk_jabatan->jabatan;
-        $wpt = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)
-            ->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
-            ->value('total_value');
+        $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
+        $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan'));
+        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan','kebutuhan_pegawai'));
     }
 
-    public function storeDetailAbk(Request $request, DetailAbk $detail_abk)
+    public function storeDetailAbk(Request $request, DetailAbk $detail_abk, AbkJabatan $abk_jabatan)
     {
         $detail_abk->update([
             'hasil_kerja' => $request->hasil_kerja,
             'jumlah_hasil_kerja' => $request->jumlah_hasil_kerja,
             'waktu_penyelesaian' => $request->waktu_penyelesaian,
+        ]);
+
+        // calculate total wpt by summing the multiplication of waktu_penyelesaian and jumlah_hasil_kerja from detail abk
+        $total_wpt = DetailAbk::where('abk_jabatan_id',$abk_jabatan->id)->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
+            ->value('total_value');
+
+        // calculate kebutuhan pegawai by dividing total wpt with numbers of working hours in a year
+        $kebutuhan_pegawai_calculated = ceil($total_wpt / 1250);
+
+        // update the total wpt and kebutuhan pegawai in abk_jabatan
+        $abk_jabatan->update([
+            'total_waktu_penyelesaian_tugas' => $total_wpt,
+            'kebutuhan_pegawai' => $kebutuhan_pegawai_calculated,
         ]);
 
         return redirect()->back()->with('success', 'Detail ABK berhasil disimpan');

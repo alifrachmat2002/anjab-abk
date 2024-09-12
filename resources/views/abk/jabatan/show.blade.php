@@ -53,7 +53,7 @@
             </div>
             <div class="row">
                 <div class="col">Jumlah Kebutuhan Pegawai</div>
-                <div class="col">{{ ceil($wpt / 1250) }} orang</div>
+                <div class="col">{{ $kebutuhan_pegawai }} orang</div>
             </div>
         </div>
     </div>
