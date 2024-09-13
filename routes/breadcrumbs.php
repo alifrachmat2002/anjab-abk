@@ -175,6 +175,15 @@ Breadcrumbs::for('laporan-anjab', function (BreadcrumbTrail $trail, $anjab) {
     $trail->parent('laporan');
     $trail->push('Analisis Jabatan ' . $anjab->tahun, route('laporan.anjab', ['tahun' => $anjab->tahun, 'anjab' => $anjab]));
 });
+Breadcrumbs::for('petajabatan', function (BreadcrumbTrail $trail, $anjab) {
+    $trail->parent('laporan');
+    $trail->push('Peta Jabatan ', route('laporan.petajabatan',['anjab' => $anjab]));
+});
+
+Breadcrumbs::for('petajabatan-unitkerja', function (BreadcrumbTrail $trail, $anjab, $unit_kerja) {
+    $trail->parent('petajabatan', $anjab);
+    $trail->push($unit_kerja->nama);
+});
 
 
 // Home > Blog
