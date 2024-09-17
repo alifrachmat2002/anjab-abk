@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('jabatan_id')->constrained('jabatan_diajukan')->onDelete('cascade');
             $table->foreignId('abk_id')->constrained('ajuan')->onDelete('cascade');
             $table->foreignId('jabatan_tutam_id')->constrained('jabatan_tugas_tambahan')->onDelete('cascade');
+            $table->integer('total_waktu_penyelesaian_tugas')->nullable();
             $table->integer('kebutuhan_pegawai')->nullable();
             $table->timestamps();
         });

@@ -257,11 +257,10 @@ class AbkController extends Controller
         $title = 'Lihat Informasi ABK';
         $jabatan = $abk_jabatan->jabatan;
         $detail_abk = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)->get();
-        $wpt = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)
-            ->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
-            ->value('total_value');
+        $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
+        $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'detail_abk', 'unit_kerja'));
+        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'kebutuhan_pegawai' ,'detail_abk', 'unit_kerja'));
     }
 
     public function editJabatan(Ajuan $abk, UnitKerja $unit_kerja, AbkJabatan $abk_jabatan)
@@ -269,19 +268,31 @@ class AbkController extends Controller
         $title = 'Edit Informasi ABK';
         $uraians = $abk_jabatan->jabatan->uraianTugas;
         $jabatan = $abk_jabatan->jabatan;
-        $wpt = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)
-            ->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
-            ->value('total_value');
+        $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
+        $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan'));
+        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan','kebutuhan_pegawai'));
     }
 
-    public function storeDetailAbk(Request $request, DetailAbk $detail_abk)
+    public function storeDetailAbk(Request $request, DetailAbk $detail_abk, AbkJabatan $abk_jabatan)
     {
         $detail_abk->update([
             'hasil_kerja' => $request->hasil_kerja,
             'jumlah_hasil_kerja' => $request->jumlah_hasil_kerja,
             'waktu_penyelesaian' => $request->waktu_penyelesaian,
+        ]);
+
+        // calculate total wpt by summing the multiplication of waktu_penyelesaian and jumlah_hasil_kerja from detail abk
+        $total_wpt = DetailAbk::where('abk_jabatan_id',$abk_jabatan->id)->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
+            ->value('total_value');
+
+        // calculate kebutuhan pegawai by dividing total wpt with numbers of working hours in a year
+        $kebutuhan_pegawai_calculated = ceil($total_wpt / 1250);
+
+        // update the total wpt and kebutuhan pegawai in abk_jabatan
+        $abk_jabatan->update([
+            'total_waktu_penyelesaian_tugas' => $total_wpt,
+            'kebutuhan_pegawai' => $kebutuhan_pegawai_calculated,
         ]);
 
         return redirect()->back()->with('success', 'Detail ABK berhasil disimpan');
@@ -306,7 +317,7 @@ class AbkController extends Controller
     {
         // When user accepts the ajuan, verification instance is created,
         // and is_approved in RoleVerifikasi is set to true
-
+        $userIsWakilRektor = auth()->user()->hasRole('Wakil Rektor 2');
         Verifikasi::create([
             'ajuan_id' => $abk->id,
             'user_id' => auth()->user()->id,
@@ -316,6 +327,10 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
+
+        if ($userIsWakilRektor) {
+            $abk->update(['is_approved' => true]);
+        }
 
         foreach ($abk->children as $child) {
             Verifikasi::create([
@@ -327,6 +342,10 @@ class AbkController extends Controller
             RoleVerifikasi::where('ajuan_id', $child->id)
                 ->where('role_id', auth()->user()->roles->first()->id)
                 ->update(['is_approved' => true]);
+
+            if ($userIsWakilRektor) {
+                $child->update(['is_approved' => true]);
+            }
         }
 
         return redirect()->route('abk.ajuans')->with('success', 'Verifikasi berhasil');
@@ -345,20 +364,19 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
-        
-            $abk_parent = $abk->parent;
-            if($abk_parent->approvedAbkCount() == $abk_parent->children->count()) {
-                Verifikasi::create([
-                    'ajuan_id' => $abk_parent->id,
-                    'user_id' => User::where('name','Superadmin')->first()->id,
-                    'is_approved' => true,
-                    'catatan' => null,
-                ]);
-                RoleVerifikasi::where('ajuan_id', $abk_parent->id)
-                    ->where('role_id', Role::where('name', 'Admin Kepegawaian')->first()->id)
-                    ->update(['is_approved' => false]);
-            }
-        
+
+        $abk_parent = $abk->parent;
+        if ($abk_parent->approvedAbkCount() == $abk_parent->children->count()) {
+            Verifikasi::create([
+                'ajuan_id' => $abk_parent->id,
+                'user_id' => User::where('name', 'Superadmin')->first()->id,
+                'is_approved' => true,
+                'catatan' => null,
+            ]);
+            RoleVerifikasi::where('ajuan_id', $abk_parent->id)
+                ->where('role_id', Role::where('name', 'Admin Kepegawaian')->first()->id)
+                ->update(['is_approved' => false]);
+        }
 
         return redirect()->route('abk.ajuans')->with('success', 'Verifikasi berhasil');
     }
@@ -410,8 +428,10 @@ class AbkController extends Controller
             ]);
         }
 
-        if(request()->has('abkparent')) {
-            return redirect()->route('abk.ajuan.show',['abk' => request('abkparent')])->with('success', 'Revisi berhasil');
+        if (request()->has('abkparent')) {
+            return redirect()
+                ->route('abk.ajuan.show', ['abk' => request('abkparent')])
+                ->with('success', 'Revisi berhasil');
         }
 
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
@@ -468,8 +488,9 @@ class AbkController extends Controller
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
     }
 
-    public function abkParentRevisi(Ajuan $abk) {
-        $previousVerificatorRoleId  = $abk->latest_verifikasi()->user->roles->first()->id;
+    public function abkParentRevisi(Ajuan $abk)
+    {
+        $previousVerificatorRoleId = $abk->latest_verifikasi()->user->roles->first()->id;
         $verifikasi = Verifikasi::create([
             'ajuan_id' => $abk->id,
             'user_id' => auth()->user()->id,
@@ -484,8 +505,6 @@ class AbkController extends Controller
         RoleVerifikasi::where('ajuan_id', $abk->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => false]);
-
-        
 
         return redirect()->route('abk.ajuans')->with('success', 'Revisi berhasil');
     }

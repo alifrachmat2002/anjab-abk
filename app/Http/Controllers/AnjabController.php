@@ -491,6 +491,10 @@ class AnjabController extends Controller
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
 
+        if(auth()->user()->hasRole('Wakil Rektor 2')) {
+            $ajuan->update(['is_approved' => true]);
+        }
+
     return redirect()->route('anjab.ajuan.index')->with('success', 'Verifikasi berhasil');
   }
 

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
 
 class JabatanTugasTambahan extends Model
 {
@@ -11,6 +13,7 @@ class JabatanTugasTambahan extends Model
     protected $fillable = ['nama', 'kode', 'unsur_id', 'jenis_jabatan_id'];
 
     use HasFactory;
+    use HasRecursiveRelationships;
 
     public function AbkJabatan()
     {

@@ -25,7 +25,7 @@
                     <tr>
                         <form
                             action="{{ route('abk.detail_abk.store', [
-                                'detail_abk' => $detail->id,
+                                'detail_abk' => $detail->id, 'abk_jabatan' => $abk_jabatan->id,
                             ]) }}"
                             method="POST">
                             @csrf
@@ -69,7 +69,7 @@
             </div>
             <div class="row">
                 <div class="col">Jumlah Kebutuhan Pegawai</div>
-                <div class="col">{{ ceil($wpt / 1250) }} orang</div>
+                <div class="col">{{ $kebutuhan_pegawai }} orang</div>
             </div>
         </div>
     </div>
