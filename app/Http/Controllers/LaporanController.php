@@ -38,6 +38,16 @@ class LaporanController extends Controller
 
         return view('laporan.anjabs', compact('title', 'jabatans'));
     }
+    public function showABK($tahun, Ajuan $anjab)
+    {
+        $title = 'Laporan Jabatan' . $anjab->tahun;
+        $abk = $anjab->abk;
+        $jabatans = JabatanDiajukan::where('ajuan_id', $anjab->id)->get();
+        $unitKerjas = UnitKerja::all();
+        $tutams = JabatanTugasTambahan::with('AbkJabatan')->get();
+
+        return view('laporan.abk', compact('title', 'anjab', 'jabatans','abk', 'unitKerjas', 'tutams'));
+    }
 
     public function indexPetaJabatan(Ajuan $anjab)
     {
