@@ -6,7 +6,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('anjab.jabatan.store') }}" method="POST" id="jabatanForm">
+                <form
+                    @if (Route::currentRouteName() == 'anjab.ajuan.create') action="{{ route('anjab.jabatan.store') }}" 
+                    @elseif(Route::currentRouteName() == 'anjab.ajuan.edit') action="{{ route('anjab.ajuan.jabatanStore', ['id' => $ajuan->id, 'tahun' => $ajuan->tahun]) }}" @endif
+                    method="POST" id="jabatanForm">
                     @csrf
                     <input type="hidden" name="parent_id" id="parent_id" value="{{ old('parent_id') }}">
                     <div class="mb-3">
@@ -35,27 +38,31 @@
                     </div>
                     <div class="mb-3">
                         <label for="unsur" class="form-label">Unsur</label>
-                        
+
                         <div class="">
-                            <select class="select2 form-select w-100 @error('unsur_id')
+                            <select
+                                class="select2 form-select w-100 @error('unsur_id')
                                 is-invalid
-                            @enderror" id="select2input" multiple="multiple" name="unsur_id[]"
-                            placeholder="Pilih Unsur" style="width: 100%" >
-                            @foreach ($unsurs as $unsur)
-                                @if ($unsur != 'Wakil Rektor')
-                                    <option value="{{ $unsur->id }}">{{ $unsur->nama }}</option>
-                                @endif
-                            @endforeach
-                        </select>
+                            @enderror"
+                                id="select2input" multiple="multiple" name="unsur_id[]" placeholder="Pilih Unsur"
+                                style="width: 100%">
+                                @foreach ($unsurs as $unsur)
+                                    @if ($unsur != 'Wakil Rektor')
+                                        <option value="{{ $unsur->id }}">{{ $unsur->nama }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                             <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Semua Unsur" id="semuaUnsurCheckbox" name="unsur_id">
-                            <label class="form-check-label" for="semuaUnsurCheckbox">
-                                Pilih Semua Unsur
-                            </label>
-                        </div>
+                                <input class="form-check-input" type="checkbox" value="Semua Unsur"
+                                    id="semuaUnsurCheckbox" name="unsur_id">
+                                <label class="form-check-label" for="semuaUnsurCheckbox">
+                                    Pilih Semua Unsur
+                                </label>
+                            </div>
                         </div>
                         @if ($errors->has('unsur_id'))
-                            <p class="" style="font-size: .875rem; margin-top: .25rem; color: var(--bs-form-invalid-color)">
+                            <p class=""
+                                style="font-size: .875rem; margin-top: .25rem; color: var(--bs-form-invalid-color)">
                                 {{ $errors->first('unsur_id') }}
                             </p>
                         @endif

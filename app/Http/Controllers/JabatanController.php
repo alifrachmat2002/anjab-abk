@@ -23,6 +23,7 @@ use App\Models\Ajuan;
 use App\Models\BakatKerjaJabatanDiajukan;
 use App\Models\FungsiPekerjaanJabatanDiajukan;
 use App\Models\JabatanDiajukan;
+use App\Models\JabatanDirevisi;
 use App\Models\JabatanUnsurDiajukan;
 use App\Models\MinatKerjaJabatanDiajukan;
 use App\Models\TemperamenKerjaJabatanDiajukan;
@@ -62,23 +63,42 @@ class JabatanController extends Controller
 
     public function store(CreateJabatanRequest $request)
     {
-        $validatedData = $request->validated();
-        $jabatan = JabatanDiajukan::create($validatedData);
+        // don't create jabatan if it already exists
+        // instead, add the unsurs that are not already in the database
+        // if jabatan exists, get the instance
+        if (JabatanDiajukan::where('nama', $request['nama'])->where('ajuan_id', null)->exists()) {
+            // get jabatan instance of the same name
+            $jabatan = JabatanDiajukan::where('nama', $request['nama'])->where('ajuan_id', null)->first();
+        } else {
+            // if jabatan instance does not exist yet, create a new one
+            $jabatan = JabatanDiajukan::create($request->all());
+        }
 
-        if ($validatedData['unsur_id'] == 'Semua Unsur') {
+        // based on the input, create instances of JabatanUnsurDiajukan
+        // if user selected all unsur, create instances for all unsurs
+        if ($request['unsur_id'] == 'Semua Unsur') {
             $unsurs = Unsur::all();
             foreach ($unsurs as $unsur) {
+                // if the unsurs already exists in the database, skip
+                if ($jabatan->jabatanUnsur?->where('unsur_id', $unsur->id)->count() > 0) {
+                    continue;
+                }
                 JabatanUnsurDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
                     'unsur_id' => $unsur->id,
                 ]);
             }
         } else {
-            foreach ($validatedData['unsur_id'] as $unsurId) {
-               JabatanUnsurDiajukan::create([
-                'jabatan_diajukan_id' => $jabatan->id,
-                'unsur_id' => $unsurId,
-            ]);
+            // if user selected specific unsurs, create instances for those unsurs
+            foreach ($request['unsur_id'] as $unsurId) {
+                // if the unsurs already exists in the database, skip
+                if ($jabatan->jabatanUnsur->where('unsur_id', $unsurId)->count() > 0) {
+                    continue;
+                }
+                JabatanUnsurDiajukan::create([
+                    'jabatan_diajukan_id' => $jabatan->id,
+                    'unsur_id' => $unsurId,
+                ]);
             }
         }
 
@@ -257,5 +277,15 @@ class JabatanController extends Controller
 
         // return redirect()->route('anjab.ajuan.create')->with('success', 'Data Jabatan berhasil Diubah');
         return redirect(route('anjab.ajuan.create'))->with('success', 'Data Jabatan ' . $jabatan->nama . ' berhasil Diubah');
+    }
+
+    public function anjabMakeCatatan(Request $request, JabatanDiajukan $jabatan) {
+    // dd(url()->previous() . "#form $jabatan->nama .$jabatan->id");
+      JabatanDirevisi::create([
+            'jabatan_diajukan_id' => $jabatan->id,
+            'catatan' => request('catatan')
+        ]);
+
+        return redirect()->back()->with('success', 'Catatan berhasil ditambahkan');
     }
 }

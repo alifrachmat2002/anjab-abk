@@ -13,4 +13,7 @@ class JabatanDirevisi extends Model
 
     protected $guarded = ['id'];
 
+    public function verifikasi() {
+        return $this->belongsTo(Verifikasi::class);
+    }
 }

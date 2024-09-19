@@ -78,10 +78,10 @@ class TutamSeeder extends Seeder
         ]);
 
         JabatanTugasTambahan::create([
-            'jenis_jabatan_id' => 2,
+            'jenis_jabatan_id' => 4,
             'unsur_id' => 9,
             'parent_id' => 1,
-            'nama' => 'Ketua Satuan Pengawas Internal',
+            'nama' => 'Supervisor Satuan Pengawas Internal',
             'kode' => null
         ]);
     }

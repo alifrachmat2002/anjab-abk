@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->year('tahun');
             $table->enum('jenis', ['anjab', 'abk']);
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
 
             $table->foreign('parent_id')->references('id')->on('ajuan')->onDelete('cascade');

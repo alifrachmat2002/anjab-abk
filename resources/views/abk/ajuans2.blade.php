@@ -70,7 +70,7 @@
                         <td>
                             <p>{{ $ajuan->created_at }}</p>
                         </td>
-                        @if ($ajuan->approvedAbkCount() == $ajuan->children()->count())
+                        @if ($ajuan->approvedAbkCount() == $ajuan->children()->count() || $ajuan->hasChildrenAbkCheckedByUser())
                             <td>
                                 {{-- check if current verificator HAS NOT accept/reject the ajuan YET, show "Terima" and "Revisi" buttons --}}
                                 @if (
@@ -78,12 +78,10 @@
                                         $ajuan->latest_verificator() != auth()->user()->getRoleNames()->first() &&
                                         $ajuan->next_verificator()->role->name == auth()->user()->getRoleNames()->first())
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <a href="{{ route('abk.ajuan.show', ['anjab' => $ajuan->id]) }}"
+                                        <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
                                             class="btn btn-outline-primary">Lihat</a>
                                         <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                             data-bs-target="#modalTerima{{ $loop->index }}">Terima</button>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#modalRevisi{{ $loop->index }}">Revisi</button>
                                     </div>
                                 @else
                                     {{-- if current verificator HAS accepted/rejected the ajuan, show them that they accepted/rejected the ajuan  --}}
@@ -127,6 +125,11 @@
                             <p>{{ $ajuan->latest_verifikasi()->created_at }}</p>
                             <hr>
                             <p>{{ $ajuan->latest_verifikasi()->catatan }}</p>
+                            <ul>
+                                @foreach ($ajuan->latest_verifikasi()->jabatanDirevisi as $jabatan)
+                                    <li>{{ $jabatan->jabatan_direvisi }}</li>
+                                @endforeach
+                            </ul>
                         @else
                             <p>Tidak ada catatan.</p>
                         @endif
@@ -149,7 +152,7 @@
                                     berikutnya.</p>
                             </div>
                             <div class="modal-footer">
-                                <form action="{{ route('abk.ajuan.verifikasi', ['abk' => $ajuan->id]) }}" method="POST">
+                                <form action="{{ route('abk.ajuan.parent.verifikasi', ['abk' => $ajuan->id]) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="btn btn-primary">Ya</button>
                                 </form>
@@ -159,9 +162,8 @@
                     </div>
                 </div>
                 {{-- Modal Terima End --}}
-
                 {{-- Modal Revisi Start --}}
-                <div class="modal fade" tabindex="-1" id="modalRevisi{{ $loop->index }}">
+                <div class="modal fade" tabindex="-1" id="modalRevisi">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -172,12 +174,38 @@
                             <form action="{{ route('abk.ajuan.revisi', ['abk' => $ajuan->id]) }}" method="POST">
                                 @csrf
                                 <div class="modal-body">
+                                    <input type="text" name="ajuan_id" id="inputAjuan" value="{{ old('ajuan_id') }}">
                                     <label for="catatan" class="form-label">Berikan Catatan tentang ajuan untuk
                                         diperbaiki</label>
-                                    <textarea class="form-control" name="catatan" id="catatan" cols="30" rows="10"></textarea>
+                                    <textarea
+                                        class="form-control mb-1 @error('catatan')
+                            is-invalid
+                        @enderror"
+                                        name="catatan" id="catatan" cols="30" rows="10"></textarea>
+                                    @error('catatan')
+                                        <label for="catatan" class="invalid-feedback">{{ $message }}</label>
+                                    @enderror
+                                    <label for="select2" class="form-label mt-1">Pilih Jabatan apa saja yang perlu
+                                        diperbaiki
+                                    </label>
+                                    <div class="w-100 border" id="select2">
+                                        <select class="select2 form-select" id="select2input" style="width: 100%"
+                                            multiple="multiple" name="jabatan_direvisi[]" placeholder="Pilih Jabatan">
+
+                                        </select>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Semua Jabatan"
+                                            id="semuaJabatanCheckbox" name="semua_jabatan_revisi">
+                                        <label class="form-check-label" for="semuaJabatanCheckbox">
+                                            Pilih Semua Jabatan
+                                        </label>
+                                    </div>
                                 </div>
+
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Simpan</button>
+                                    <button type="submit" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -187,8 +215,105 @@
             @endforeach
         </tbody>
     </table>
+
     {{-- make a kembali button --}}
     <a href="{{ route('home') }}" class="btn btn-primary header1"><i data-feather="arrow-left"></i> Kembali</a>
 
 
+@endsection
+@section('scripts')
+    @if ($errors->any())
+        {{-- BANG ERROR --}}
+        <script>
+            const myModal = document.getElementById('modalRevisi');
+            const bootstrapModal = new bootstrap.Modal(myModal);
+            bootstrapModal.show();
+
+            const select2 = document.getElementById('select2input');
+
+            const inputAjuan = document.getElementById('inputAjuan');
+
+            fetch(`{{ route('api.jabatanabk.parent') }}?ajuan=${inputAjuan.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.jabatans);
+                    data.jabatans.map(jabatan => {
+                        const option = document.createElement('option');
+                        option.value = jabatan.unit_kerja.toUpperCase() + ' - ' + jabatan.jabatan +
+                            ' (di bawahi oleh ' + jabatan.jabatan_tutam +
+                            ')';
+                        option.text = jabatan.unit_kerja.toUpperCase() + ' - ' + jabatan.jabatan +
+                            ' (di bawahi oleh ' + jabatan.jabatan_tutam +
+                            ')';
+                        select2.appendChild(option);
+                    })
+                })
+
+            const selectAllCheckbox = document.getElementById('semuaJabatanCheckbox');
+            selectAllCheckbox.addEventListener('change', event => {
+                if (event.target.checked) {
+                    select2.value = "Semua Jabatan";
+                    select2.disabled = true;
+
+                } else {
+                    select2.disabled = false;
+
+                }
+            })
+        </script>
+    @endif
+    <script>
+        const modalRevisi = document.getElementById('modalRevisi');
+        modalRevisi.addEventListener('show.bs.modal', event => {
+            console.log('NJIR DIPENCET');
+            const btn = event.relatedTarget
+            // console.log(btn)z
+
+            const ajuan = btn.getAttribute('data-ajuan')
+            // console.log(ajuan)
+
+            const inputAjuan = document.getElementById('inputAjuan');
+
+            inputAjuan.value = ajuan;
+
+            const select2 = document.getElementById('select2input');
+            console.log(select2)
+            console.log(ajuan)
+
+            // make a request to fetch jabatan diajukan save it to select2
+            fetch(`{{ route('api.jabatanabk.parent') }}?ajuan=${ajuan}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.jabatans);
+                    data.jabatans.map(jabatan => {
+                        const option = document.createElement('option');
+                        option.value = jabatan.unit_kerja.toUpperCase() + ' - ' + jabatan.jabatan +
+                            ' (di bawahi oleh ' + jabatan.jabatan_tutam +
+                            ')';
+                        option.text = jabatan.unit_kerja.toUpperCase() + ' - ' + jabatan.jabatan +
+                            ' (di bawahi oleh ' + jabatan.jabatan_tutam +
+                            ')';
+                        select2.appendChild(option);
+                    })
+                })
+
+            const selectAllCheckbox = document.getElementById('semuaJabatanCheckbox');
+            selectAllCheckbox.addEventListener('change', event => {
+                if (event.target.checked) {
+                    select2.value = "Semua Jabatan";
+                    select2.disabled = true;
+
+                } else {
+                    select2.disabled = false;
+
+                }
+            })
+        })
+
+        $(document).ready(function() {
+            $('.select2').select2({
+                dropdownParent: '#modalRevisi'
+            });
+        });
+    </script>
 @endsection

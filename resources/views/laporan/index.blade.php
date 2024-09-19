@@ -8,6 +8,7 @@
         <h1 class="fw-light fs-4 d-inline nav-item">Laporan Hasil Anjab ABK</h1>                
     </div>
     <hr>
+    <a href="{{ route('home') }}" class="btn btn-primary header1 mb-3"><i data-feather="arrow-left"></i> Kembali</a>
     <div class="">
     <table class="table table-bordered table-striped mt-3 ">
         <thead>
@@ -29,7 +30,7 @@
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a href="{{ route('laporan.anjab', ['tahun' => $ajuan->tahun, 'anjab' => $ajuan]) }}" class="btn btn-outline-primary">Lihat Laporan Anjab</a>
                             <a href="" class="btn btn-outline-primary">Lihat Laporan ABK</a>
-                            <a href="" class="btn btn-outline-primary">Lihat Peta Jabatan</a>
+                            <a href="{{ route('laporan.petajabatan',['anjab' => $ajuan]) }}" class="btn btn-outline-primary">Lihat Peta Jabatan</a>
                         </div>  
                     </td>
                     <td>

@@ -93,9 +93,15 @@ class Ajuan extends Model
     }
 
     // get the latest verifikasi by current user
+    // public function latest_verifikasi_by_current_user()
+    // {
+    //     return $this->verifikasi()->where('user_id', auth()->user()->id)->latest()->first();
+    // }
     public function latest_verifikasi_by_current_user()
     {
-        return $this->verifikasi()->where('user_id', auth()->user()->id)->latest()->first();
+        return $this->hasOne(Verifikasi::class)
+            ->where('user_id', auth()->id())
+            ->latest();
     }
 
     // Get the role name of the verificator who verifed the latest verifikasi
@@ -162,7 +168,7 @@ class Ajuan extends Model
         return $this->belongsToMany(Ajuan::class, 'abk_anjab', 'abk_id', 'anjab_id');
     }
 
-    // return the count of approved abk for an anjab
+    // return the count of approved abk for an abk
     public function approvedAbkCount()
     {
         $roleIdWD2 = Role::where('name', 'Wakil Dekan 2')->first()->id;
@@ -174,6 +180,26 @@ class Ajuan extends Model
         })->count();
     }
 
+    // return the count of abk_unit that is verified/rejected by user
+    public function hasChildrenAbkCheckedByUser(){
+        return $this->children()->whereHas('verifikasi', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->count();
+    }
+
+    // returns the count of abk_unit of an abk that is rejected by user
+    // input :
+    // - an abk instance that has no parent ('parent_id' == null)
+
+    // output :
+    // count of abk_unit of an abk that is rejected by user
+    public function hasChildrenRejectedByUser() {
+        return $this->children()->whereHas('latest_verifikasi_by_current_user', function ($query) {
+                $query->where('is_approved', false);
+            })
+            ->count();
+    }
+
     // Ajuan for manajer kepegawaian
     // Get ajuan where jenis = anjab and already approved by admin
     public static function abk_for_verificator_after($previousVerificatorId)
@@ -182,7 +208,7 @@ class Ajuan extends Model
 
         if ($previousVerificatorId == Role::where('name', 'Operator Unit Kerja')->first()->id) {
             return
-                Ajuan::whereHas('detailAbk', function ($query) {
+                Ajuan::whereHas('abkUnitKerja', function ($query) {
                     $query->where('unit_kerja_id', auth()->user()->unit_kerja_id);
                 })
                 ->whereHas('role_verifikasi', function ($query) use ($previousVerificatorId) {
@@ -191,6 +217,24 @@ class Ajuan extends Model
                 ->orWhereHas('verifikasi', function ($query) use ($roleId) {
                     $query->whereHas('user', function ($query) use ($roleId) {
                         $query->where('id', $roleId);
+                    });
+                })
+                ->get();
+        }
+
+        // If user is Wakil Rektor 2, get all abk where parent_id is null, AND (role_verifikasi is approved by previous verificator OR (is previously rejected or approved by Wakil Rektor 2))
+        if (auth()->user()->roles->first()->name == 'Wakil Rektor 2') {
+            return Ajuan::where('parent_id', null)
+                ->where('jenis', 'abk')
+                ->where(function ($query) use ($previousVerificatorId, $roleId) {
+                    $query->whereHas('role_verifikasi', function ($subQuery) use ($previousVerificatorId) {
+                        $subQuery->where('role_id', $previousVerificatorId)
+                            ->where('is_approved', true);
+                    })
+                    ->orWhereHas('verifikasi', function ($subQuery) use ($roleId) {
+                        $subQuery->whereHas('user', function ($userQuery) use ($roleId) {
+                            $userQuery->where('id', $roleId);
+                        });
                     });
                 })
                 ->get();
@@ -211,5 +255,17 @@ class Ajuan extends Model
     public function abkUnitKerja()
     {
         return $this->hasMany(AbkUnitKerja::class, 'abk_id');
+    }
+
+    public function unitKerja() {
+        return $this->belongsToMany(UnitKerja::class, 'abk_unit_kerja', 'abk_id', 'unit_kerja_id');
+    }
+
+    public function jabatanDiajukan() {
+        return $this->hasMany(JabatanDiajukan::class);
+    }
+
+    public function abkJabatan() {
+        return $this->hasMany(AbkJabatan::class,'abk_id');
     }
 }

@@ -8,7 +8,14 @@
                 <a href="{{ route('anjab.ajuan.create') }}" class="btn btn-outline-primary">Buat Ajuan Analisis Jabatan Baru</a>
                 <a href="{{ route('anjab.ajuan.index') }}" class="btn btn-outline-primary">Lihat Daftar Ajuan Analisis jabatan</a>
             @endcan
-            <a href="{{ route('abk.ajuans') }}" class="btn btn-outline-primary">Lihat Daftar Ajuan Analisis Beban Kerja</a>
+            @can('verify anjab')
+                <a href="{{ route('anjab.ajuan.index') }}" class="btn btn-outline-primary">Lihat Daftar Ajuan Analisis
+                    jabatan</a>
+            @endcan
+            @if (auth()->user()->can('make abk') || auth()->user()->can('verify abk'))
+                <a href="{{ route('abk.ajuans') }}" class="btn btn-outline-primary">Lihat Daftar Ajuan Analisis Beban
+                    Kerja</a>
+            @endif
         </div>
 
     </div>

@@ -42,7 +42,6 @@
                     <th>Diajukan Tanggal</th>
                     <th>Aksi</th>
                 @endcan
-                <th>Catatan</th>
             </tr>
         </thead>
         <tbody>
@@ -50,26 +49,32 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td class="w-25">
-                        <div class="d-flex flex-column justify-content-between">
+                        <div class="d-flex @can('make anjab') flex-column @endcan justify-content-between">
                             <p>{{ $ajuan->tahun }} </p>
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                @can('make anjab')
+                            @can('verify anjab')
+                                <a href="{{ route('anjab.ajuan.show', ['ajuan' => $ajuan->tahun, 'id' => $ajuan->id]) }}"
+                                    class="btn btn-outline-primary">Lihat</a>
+                            @endcan
+                            @can('make anjab')
+                                <div class="btn-group" role="group" aria-label="Basic example">
                                     <a href="{{ route('anjab.ajuan.show', ['ajuan' => $ajuan->tahun, 'id' => $ajuan->id]) }}"
                                         class="btn btn-outline-primary">Lihat</a>
                                     @if (!$ajuan->latest_verifikasi()->is_approved && $ajuan->next_verificator()->role->name == 'Admin Kepegawaian')
                                         <a href="{{ route('anjab.ajuan.edit', ['tahun' => $ajuan->tahun, 'id' => $ajuan->id]) }}"
                                             class="btn btn-outline-primary">Edit</a>
                                     @endif
-                                    
+
                                     @if ($ajuan->is_approved() && !$ajuan->abk->count())
-                                        <button type="submit" class="btn btn-outline-success" aria-disabled="true" onclick="event.preventDefault(); document.getElementById('submit-ajuan-form{{ $ajuan->id }}').submit();">Buat Ajuan ABK</button>
-                                        @endif
-                                        
-                                @endcan
-                            </div>
-                            <form id="submit-ajuan-form{{ $ajuan->id }}" action="{{ route('abk.ajuan.store', ['anjab' => $ajuan->id]) }}" method="POST">
-                                @csrf
-                            </form>
+                                        <button type="submit" class="btn btn-outline-success" aria-disabled="true"
+                                            onclick="event.preventDefault(); document.getElementById('submit-ajuan-form{{ $ajuan->id }}').submit();">Buat
+                                            Ajuan ABK</button>
+                                    @endif
+                                </div>
+                                <form id="submit-ajuan-form{{ $ajuan->id }}"
+                                    action="{{ route('abk.ajuan.store', ['anjab' => $ajuan->id]) }}" method="POST">
+                                    @csrf
+                                </form>
+                            @endcan
                         </div>
                     </td>
                     @can('make anjab')
@@ -119,7 +124,7 @@
                             @endif
                         </td>
                     @elsecan('verify anjab')
-                        <td>
+                        <td class="">
                             <p>{{ $ajuan->created_at }}</p>
                         </td>
                         <td>
@@ -131,9 +136,6 @@
                                     $ajuan->latest_verificator() != auth()->user()->getRoleNames()->first() &&
                                     $ajuan->next_verificator()->role->name == auth()->user()->getRoleNames()->first())
                                 <div class="btn-group" role="group" aria-label="Basic example">
-
-                                    <a href="{{ route('anjab.ajuan.show', ['ajuan' => $ajuan, 'id' => $ajuan->id]) }}" class="btn btn-outline-primary">Lihat</a>
-
                                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                         data-bs-target="#modalTerima{{ $loop->index }}">Terima</button>
                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -142,8 +144,8 @@
                             @else
                                 {{-- if current verificator HAS accepted/rejected the ajuan, show them that they accepted/rejected the ajuan  --}}
 
-                                @if (!empty($ajuan->latest_verifikasi_by_current_user()))
-                                    @if ($ajuan->latest_verifikasi_by_current_user()->is_approved)
+                                @if (!empty($ajuan->latest_verifikasi_by_current_user))
+                                    @if ($ajuan->latest_verifikasi_by_current_user->is_approved)
                                         <p class="badge text-bg-success">Anda sudah menerima Ajuan ini</p>
                                         @if (!empty($ajuan->next_verificator()))
                                             <div class="alert alert-info w-100">
@@ -164,26 +166,6 @@
                             @endif
                         </td>
                     @endcan
-                    <td>
-                        {{-- check if latest verification has catatan and catatan is not from current user, if true show the catatan --}}
-                        @if ($ajuan->latest_verifikasi()->catatan)
-                            <p>Catatan dari {{ $ajuan->latest_verifikasi()->user->name }}
-                                ({{ $ajuan->latest_verifikasi()->user->getRolenames()->first() }})
-                            </p>
-                            <p>{{ $ajuan->latest_verifikasi()->created_at }}</p>
-                            <hr>
-                            <p>{{ $ajuan->latest_verifikasi()->catatan }}</p>
-                            <p>Jabatan yang perlu diperbaiki :</p>
-                            <ul>
-                                @foreach ($ajuan->latest_verifikasi()->jabatanDirevisi as $jabatan)
-                                    <li>{{ $jabatan->jabatan_direvisi }}</li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <p>Tidak ada catatan.</p>
-                        @endif
-                    </td>
-                    {{-- <td>{{  ? <p class="bad"></p> : "Revisi" }}</td> --}}
                 </tr>
 
                 {{-- Modals are placed here so that it can pass $ajuan->id when the buttons are clicked --}}
@@ -213,7 +195,7 @@
                     </div>
                 </div>
                 {{-- Modal Terima End --}}
-            @endforeach            
+            @endforeach
         </tbody>
     </table>
 
@@ -222,37 +204,23 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Beri Catatan dan Minta Revisi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <h5 class="modal-title">Beri Catatan dan Minta Revisi (Semua Jabatan)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="{{ route('anjab.ajuan.revisi') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <input type="text" name="ajuan_id" id="inputAjuan" value="{{ old('ajuan_id') }}">
                         <label for="catatan" class="form-label">Berikan Catatan tentang ajuan untuk
-                        diperbaiki</label>
-                        <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" cols="30" rows="10"></textarea>
+                            diperbaiki</label>
+                        <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" cols="30"
+                            rows="10"></textarea>
                         @error('catatan')
                             <label for="catatan" class="invalid-feedback">{{ $message }}</label>
                         @enderror
-                        <label for="select2" class="form-label mt-1">Pilih Jabatan apa saja yang perlu diperbaiki
-                        </label>
-                        <div class="w-100 border" id="select2">
-                            <select class="select2 form-select" id="select2input" style="width: 100%" multiple="multiple" name="jabatan_direvisi[]" placeholder="Pilih Jabatan">
-                                
-                            </select>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Semua Jabatan" id="semuaJabatanCheckbox" name="semua_jabatan_revisi">
-                            <label class="form-check-label" for="semuaJabatanCheckbox">
-                                Pilih Semua Jabatan
-                            </label>
-                        </div>
                     </div>
-                        <div class="modal-footer">
-                        <button type="submit" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Simpan</button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -263,46 +231,18 @@
     {{-- make a kembali button --}}
     <a href="{{ route('home') }}" class="btn btn-primary header1"><i data-feather="arrow-left"></i> Kembali</a>
 
+
+@endsection
+@section('scripts')
     @if ($errors->any())
         {{-- BANG ERROR --}}
         <script>
             const myModal = document.getElementById('modalRevisi');
             const bootstrapModal = new bootstrap.Modal(myModal);
             bootstrapModal.show();
-
-            const select2 = document.getElementById('select2input');
-
-            const inputAjuan = document.getElementById('inputAjuan');
-
-            fetch(`{{ route('jabatandiajukan.index') }}?ajuan=${inputAjuan.value}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.data);
-                    data.data.map(jabatan => {
-                        const option = document.createElement('option');
-                        option.value = jabatan;
-                        option.text = jabatan;
-                        select2.appendChild(option);
-                    })
-                })
-            
-            const selectAllCheckbox = document.getElementById('semuaJabatanCheckbox');
-            selectAllCheckbox.addEventListener('change', event => {
-                if (event.target.checked) {
-                    select2.value = "Semua Jabatan";
-                    select2.disabled = true;
-                    
-                } else {
-                    select2.disabled = false;
-                    
-                }
-            })
         </script>
     @endif
-
-@endsection
-@section('scripts')
-        <script>
+    <script>
         const modalRevisi = document.getElementById('modalRevisi');
         modalRevisi.addEventListener('show.bs.modal', event => {
             console.log('NJIR DIPENCET');
@@ -315,41 +255,6 @@
             const inputAjuan = document.getElementById('inputAjuan');
 
             inputAjuan.value = ajuan;
-
-            const select2 = document.getElementById('select2input');
-            console.log(select2)
-
-            // make a request to fetch jabatan diajukan save it to select2
-            fetch(`{{ route('jabatandiajukan.index') }}?ajuan=${ajuan}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.data);
-                    data.data.map(jabatan => {
-                        const option = document.createElement('option');
-                        option.value = jabatan;
-                        option.text = jabatan;
-                        select2.appendChild(option);
-                    })
-                })
-            
-            const selectAllCheckbox = document.getElementById('semuaJabatanCheckbox');
-            selectAllCheckbox.addEventListener('change', event => {
-                if (event.target.checked) {
-                    select2.value = "Semua Jabatan";
-                    select2.disabled = true;
-                    
-                } else {
-                    select2.disabled = false;
-                    
-                }
-            })
         })
-    </script>
-    <script>
-                $(document).ready(function() {
-            $('.select2').select2({
-                dropdownParent: '#modalRevisi'
-            });
-        });
     </script>
 @endsection
