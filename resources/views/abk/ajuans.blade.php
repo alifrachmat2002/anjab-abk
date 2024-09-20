@@ -60,9 +60,11 @@
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <a href="{{ route('abk.unitkerja.show', ['abk' => $ajuan->parent, 'unit_kerja' => auth()->user()->unitKerja]) }}"
                                         class="btn btn-outline-primary">Lihat</a>
-                                    @if ($ajuan->next_verificator()->role->name == 'Operator Unit Kerja')
+                                    @if ($ajuan->next_verificator())
+                                        @if ($ajuan->next_verificator()->role->name == 'Operator Unit Kerja')
                                         <a href="{{ route('abk.unitkerja.edit', ['abk' => $ajuan->parent, 'unit_kerja' => auth()->user()->unitKerja]) }}"
                                             class="btn btn-outline-secondary">Edit</a>
+                                        @endif
                                     @endif
                                 </div>
                             @endcan
@@ -84,7 +86,7 @@
                             @endif
 
                             {{-- if someone has verified the ajuan, display alert success --}}
-                            @if ($ajuan->approved_verificator()->count() && $ajuan->approved_verificator)
+                            @if ($ajuan->approved_verificator()->count() && $ajuan->approved_verificator())
                                 <div class="alert alert-success w-100">
                                     <div class="alert-heading d-flex">
                                         <img width="20px" data-feather="check-circle" class="m-0 p-0 me-2"></img>
