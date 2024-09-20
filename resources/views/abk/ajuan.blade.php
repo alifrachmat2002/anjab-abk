@@ -52,7 +52,7 @@
                                 {{-- if current verificator HAS accepted/rejected the ajuan, show them that they accepted/rejected the ajuan  --}}
 
                                 @if (!empty($abk_unit->latest_verifikasi_by_current_user))
-                                    @if ($abk_unit->latest_verifikasi_by_current_user()->is_approved)
+                                    @if ($abk_unit->latest_verifikasi_by_current_user->is_approved)
                                         <p class="badge text-bg-success">Anda sudah menerima Ajuan ini</p>
                                         @if (!empty($abk_unit->next_verificator()))
                                             <div class="alert alert-info w-100">
