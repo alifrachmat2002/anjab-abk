@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AbkExport;
+use App\Models\AbkJabatan;
 use App\Models\Ajuan;
 use App\Models\JabatanDiajukan;
 use App\Models\JabatanTugasTambahan;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel as Excel;
 
 class LaporanController extends Controller
 {
@@ -38,6 +42,7 @@ class LaporanController extends Controller
 
         return view('laporan.anjabs', compact('title', 'jabatans'));
     }
+
     public function showABK($tahun, Ajuan $anjab)
     {
         $title = 'Laporan Jabatan' . $anjab->tahun;
@@ -46,7 +51,43 @@ class LaporanController extends Controller
         $unitKerjas = UnitKerja::all();
         $tutams = JabatanTugasTambahan::with('AbkJabatan')->get();
 
-        return view('laporan.abk', compact('title', 'anjab', 'jabatans','abk', 'unitKerjas', 'tutams'));
+        return view('laporan.abk', compact('title', 'anjab', 'jabatans', 'abk', 'unitKerjas', 'tutams'));
+    }
+
+    public function showLaporanABK($tahun, Ajuan $anjab)
+    {
+        $title = 'Laporan Jabatan' . $anjab->tahun;
+        $abkIds = $anjab->abk->pluck('id');
+        $unitkerjas = UnitKerja::with([
+            // include unitKerja's unsur relationship
+            'unsur' => [
+                // include unsur's jabatanTugasTambahan relationship
+                'jabatanTugasTambahan' => [
+                    // include jabatanTugasTambahan's AbkJabatan relationship
+                    'AbkJabatan' => function ($query) use ($abkIds) {
+                        $query->with('jabatan:id,nama')->whereIn('abk_id', $abkIds);
+                    },
+                ],
+            ],
+        ])->get();
+        $jabatans = AbkJabatan::select('jabatan_diajukan.nama as nama_jabatan', 
+                             DB::raw('SUM(abk_jabatan.kebutuhan_pegawai) as total_kebutuhan'),
+                             )
+             ->whereIn('abk_id',$abkIds)
+             ->join('jabatan_diajukan', 'abk_jabatan.jabatan_id', '=', 'jabatan_diajukan.id')
+             ->groupBy('abk_jabatan.jabatan_id', 'jabatan_diajukan.nama')
+             ->get();
+        return view('laporan.abks', compact('title', 'anjab', 'unitkerjas','jabatans'));
+    }
+
+    public function downloadLaporanAbk($tahun, Ajuan $anjab)
+    {
+        try {
+            $abkIds = $anjab->abk->pluck('id');
+            return Excel::download(new AbkExport($abkIds, $anjab->id), 'abk.xlsx');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
     public function indexPetaJabatan(Ajuan $anjab)

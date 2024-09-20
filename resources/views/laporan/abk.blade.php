@@ -12,8 +12,8 @@
         <a href="{{ route('laporan.index') }}" class="mb-3 btn btn-primary header1"><i data-feather="arrow-left"></i> Kembali</a>
     </div>
     <div class="mb-3 btn-group">
-        <a target="_blank" href="{{ route('laporan.anjab.laporan', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Lihat Laporan Lengkap</a>
-        <a download href="{{ route('laporan.anjab.laporan', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Unduh Laporan Lengkap</a>
+        <a target="_blank" href="{{ route('laporan.abk.laporan', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Lihat Laporan Lengkap</a>
+        <a download href="{{ route('laporan.abk.download', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Unduh Laporan Lengkap</a>
     </div>
     <div class="mb-3">
         <livewire:laporan-abk :unitkerjas="$unitKerjas" :abk="$abk" :tutams="$tutams"/>
