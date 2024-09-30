@@ -29,13 +29,13 @@ class UraianTugasController extends Controller
     {
         $jabatanId = $request->jabatan_id;
         $supervisorId = $request->supervisor_id;
-
+        
         $abkJabatan = AbkJabatan::where('jabatan_id', $jabatanId)->where('jabatan_tutam_id', $supervisorId)->latest()->first();
-
+        
         $detailAbk = DetailAbk::where('abk_jabatan_id', $abkJabatan->id)->get();
-
-        $uraians = UraianTugas::whereIn('id', $detailAbk->pluck('uraian_tugas_id'))->get();
-
+        
+        $uraians = UraianTugas::whereIn('id', $detailAbk->pluck('uraian_tugas_diajukan_id'))->get();
+        
         return UraianTugasResource::collection($uraians);
     }
 }

@@ -15,4 +15,4 @@ Route::apiResource('/jabatandiajukan', App\Http\Controllers\JabatanDiajukanAjuan
 Route::get('/jabatanabk',[AbkController::class, 'getJabatanABK'])->name('api.jabatanabk');
 Route::get('/jabatanabk/parent',[AbkController::class, 'getJabatanABKParent'])->name('api.jabatanabk.parent');
 
-Route::apiResource('/uraian-tugas-by-jabatan-and-supervisor', [App\Http\Controllers\Api\UraianTugasController::class, 'getUraianTugasByJabatanAndSupervisor'])->name('api.uraian-tugas-by-jabatan-and-supervisor');
+Route::get('/uraian-tugas-by-jabatan-and-supervisor', [App\Http\Controllers\Api\UraianTugasController::class, 'getUraianTugasByJabatanAndSupervisor']);
