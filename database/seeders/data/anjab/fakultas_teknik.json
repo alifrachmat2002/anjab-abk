@@ -4,216 +4,489 @@
         "nama": "Pranata Lab. Pendidikan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pranata Lab. Pendidikan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Menyusun program tahunan pengelolaan laboratorium sebagai anggota",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 200,
+                "jumlah_hasil_kerja": 10
+            },
+            {
+                "nama_tugas": "Menyusun SOP penggunaan bahan khusus pada kegiatan pendidikan, penelitian dan pengabdian masyarakat",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 200,
+                "jumlah_hasil_kerja": 10
+            },
+            {
+                "nama_tugas": "Menyusun SOP praktikum yang menggunakan peralatan kategori dan bahan umum pada kegiatan pendidikan",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 200,
+                "jumlah_hasil_kerja": 10
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Informasi Akademik",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Informasi Akademik",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Menyusun laporan kegiatan akademik kepada atasan sebagaibahan evaluasi dan pertanggungjawaban",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 200,
+                "jumlah_hasil_kerja": 10
+            },
+            {
+                "nama_tugas": "Menerima dan mencatat dokumen akademik surat masuk dan keluar",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 2
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi Perpustakaan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Perpustakaan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
+    },
+    {
+        "parent_id": 1,
+        "nama": "Pengadministrasi Umum",
+        "kode": "",
+        "ikhtisar": "",
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Membuat laporan rekapitulasi pemasukan barang tiap bulan",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 180,
+                "jumlah_hasil_kerja": 12
+            },
+            {
+                "nama_tugas": "Mencatat dan menginventarisasi barang habis pakai yang sudah rusak/usang",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 2
+            },
+            {
+                "nama_tugas": "Melaporkan daftar penghapusan barang rusak/usang ke atasan",
+                "hasil_kerja": "kegiatan/tahun",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 2
+            },
+            {
+                "nama_tugas": "Membuat catatan pengeluaran barang harian",
+                "hasil_kerja": "kegiatan/hari",
+                "waktu_penyelesaian": 10,
+                "jumlah_hasil_kerja": 1095
+            },
+            {
+                "nama_tugas": "Membuat laporan rekapitulasi pengeluaran barang tiap bulan",
+                "hasil_kerja": "kegiatan/bln",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 12
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Barang Milik Negara",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Barang Milik Negara",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Membuat laporan penghapusan barang",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 2
+            },
+            {
+                "nama_tugas": "Membuat kuitansi SPJ untuk kegiatan rutin",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 60,
+                "jumlah_hasil_kerja": 48
+            },
+            {
+                "nama_tugas": "Membuat jadwal suatu paket pengadaan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 30,
+                "jumlah_hasil_kerja": 48
+            },
+            {
+                "nama_tugas": "Membuat kuitansi SPJ untuk kegiatan rutin",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 60,
+                "jumlah_hasil_kerja": 48
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pustakawan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pustakawan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Gaji",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Gaji",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengolah data",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengolah data",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi Akademik",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Akademik",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Menerima dan mencatat dokumen akademik surat masuk dan keluar",
+                "hasil_kerja": "surat/hari",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Perbendaharaan dan Pelayanan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Perbendaharaan dan Pelayanan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Teknisi Lab.",
         "kode": "",
         "ikhtisar": "Ikhtisar Teknisi Lab.",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Keuangan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Keuangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Membuat laporan perpajakan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Menyusun laporan keuangan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Membuat laporan realisasi per bulan dan triwulan dan tahunan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Memproses surat perintah perjalanan dinas (SPPD)",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Membuat SP, SPTD, STJB, SPM, Pengajuan GU/TUP dan LS",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Membuat laporan pajak",
+                "hasil_kerja" : "laporan",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            },
+            {
+                "nama_tugas": "Melaksanakan menandatangani surat pertanggungjawaban belanja (SPJ)",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 100,
+                "jumlah_hasil_kerja": 55
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengolah data Pengelolaan Keuangan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengolah data Pengelolaan Keuangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pramu Bakti",
         "kode": "",
         "ikhtisar": "Ikhtisar Pramu Bakti",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Membuat tanda terima pengiriman surat",
+                "hasil_kerja": "kegiatan",
+                "waktu_penyelesaian": 5,
+                "jumlah_hasil_kerja": 5475
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi Keuangan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Keuangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Teknisi Peralatan Kantor",
         "kode": "",
         "ikhtisar": "Ikhtisar Teknisi Peralatan Kantor",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "membuat laporan keursakan dan pemeliharaan gedung dan bangunan",
+                "hasil_kerja": "laporan",
+                "waktu_penyelesaian": 2,
+                "jumlah_hasil_kerja": 730
+            },
+            {
+                "nama_tugas": "membuat laporan kerusakan bangunan dan taman",
+                "hasil_kerja": "laporan",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 104
+            }
+        ]
     },
     {
         "parent_id": null,
-        "nama": "Pengelola Informasi Akademik",
+        "nama": "Pengadministrasi Persuratan",
         "kode": "",
-        "ikhtisar": "Ikhtisar Pengelola Informasi Akademik",
-        "prestasi": ""
+        "ikhtisar": "Pengadministrasi Persuratan",
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Menerima surat masuk dari luar fakultas",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 1,
+                "jumlah_hasil_kerja": 9125
+            },
+            {
+                "nama_tugas": "Memilah surat masuk sesuai tujuan surat",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 3,
+                "jumlah_hasil_kerja": 9125
+            },
+            {
+                "nama_tugas": "membuat lembar disposisi",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 2,
+                "jumlah_hasil_kerja": 9125
+            },
+            {
+                "nama_tugas": "mengarsip surat keluar",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 2,
+                "jumlah_hasil_kerja": 3650
+            },
+            {
+                "nama_tugas": "mengarsip surat undangan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 2,
+                "jumlah_hasil_kerja": 1825
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Pembuat Daftar Gaji",
         "kode": "",
         "ikhtisar": "Ikhtisar Pembuat Daftar Gaji",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Penyusun Laporan Keuangan",
         "kode": "",
         "ikhtisar": "Ikhtisar Penyusun Laporan Keuangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengelola Sistem dan Jaringan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Sistem dan Jaringan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengolah data Tenaga Kependidikan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengolah data Tenaga Kependidikan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi Layanan Kegiatan Kemahasiswaan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Layanan Kegiatan Kemahasiswaan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengolah Data Program, Anggaran, dan Laporan Keuangan",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengolah Data Program, Anggaran, dan Laporan Keuangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi barang milik Undip",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi barang milik Undip",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Penyusun dokumen Perencanaan",
         "kode": "",
         "ikhtisar": "Ikhtisar Penyusun dokumen Perencana",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Penyusun Program Anggaran dan Pelaporan",
         "kode": "",
         "ikhtisar": "Ikhtisar Penyusun Program Anggaran dan Pelaporan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Sekretaris",
         "kode": "",
         "ikhtisar": "Ikhtisar Sekretaris",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Mengelola surat masuk dekan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 5,
+                "jumlah_hasil_kerja": 1560
+            },
+            {
+                "nama_tugas": "mengatur jadwal tamu/rapat pimpinan dan pengaturan ruang sidang",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 15,
+                "jumlah_hasil_kerja": 156
+            }
+        ]
+    },
+    {
+        "parent_id": 1,
+        "nama": "Pengadministrasi data Peraturan Perundang-undangan",
+        "kode": "",
+        "ikhtisar": "",
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Mengonsep Surat Keputusan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 3,
+                "jumlah_hasil_kerja": 9125
+            },
+            {
+                "nama_tugas": "Mengarsip surat keputusan baik hardcopy maupun softcopy",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 2,
+                "jumlah_hasil_kerja": 1095
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Teknisi Komputer",
         "kode": "",
         "ikhtisar": "Ikhtisar Teknisi Komputer",
-        "prestasi": ""
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengadministrasi data Peraturan perundang-undangan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengadministrasi data Peraturan perundang-undangan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Pengadministrasi Kepegawaian",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Kepegawaian",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [
+            {
+                "nama_tugas": "Menyiapkan bahan sosialisas tugas belajar dan aturan tugas belajar",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 3,
+                "jumlah_hasil_kerja": 9125
+            },
+            {
+                "nama_tugas": "Membuat Analisis Jabatan",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 1
+            },
+            {
+                "nama_tugas": "Membuat Analisis Beban Kerja",
+                "hasil_kerja": "surat",
+                "waktu_penyelesaian": 120,
+                "jumlah_hasil_kerja": 1
+            }
+        ]
     },
     {
         "parent_id": null,
         "nama": "Petugas Kearsipan",
         "kode": "",
         "ikhtisar": "Ikhtisar Petugas Kearsipan",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     },
     {
         "parent_id": null,
         "nama": "Petugas Humas",
         "kode": "",
         "ikhtisar": "Ikhtisar Petugas Humas",
-        "prestasi": ""
+        "prestasi": "",
+        "tugas": [{}]
     }
 ]

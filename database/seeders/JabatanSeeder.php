@@ -23,7 +23,12 @@ class JabatanSeeder extends Seeder
         $data = array_merge($data_fakultas_teknik, $data_spi);
 
         foreach ($data as $data_jabatan) {
-            $jabatan = Jabatan::create($data_jabatan);
+            $jabatan = Jabatan::create([
+                'nama' => $data_jabatan['nama'],
+                'kode' => $data_jabatan['kode'],
+                'ikhtisar' => $data_jabatan['ikhtisar'],
+                'prestasi' => $data_jabatan['prestasi'],
+            ]);
         }
     }
 }
