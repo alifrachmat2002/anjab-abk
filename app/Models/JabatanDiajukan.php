@@ -98,7 +98,7 @@ class JabatanDiajukan extends Model
     }
 
     public function abkJabatan() {
-        return $this->hasMany(AbkJabatan::class);
+        return $this->hasMany(AbkJabatan::class,'jabatan_id');
     }
 
     public function unsurs()
