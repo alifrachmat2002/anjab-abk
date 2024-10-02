@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Models\Verifikasi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AnjabSeeder extends Seeder
 {
@@ -269,7 +270,7 @@ class AnjabSeeder extends Seeder
         $data_jabatan = json_decode(file_get_contents(database_path('seeders/data/anjab/fakultas_teknik.json')), true);
 
         foreach ($data_jabatan as $data) {
-            
+
             $ajuanId = Ajuan::where('parent_id', $parentAbk->id)
                 ->where('jenis', 'abk')
                 ->whereHas('unitKerja', function ($query) {
@@ -287,12 +288,12 @@ class AnjabSeeder extends Seeder
                 'prestasi' => $data['prestasi'],
             ]);
 
-            $unsur = Unsur::where('nama',"Fakultas/Sekolah")->first();
+            $unsur = Unsur::where('nama', "Fakultas/Sekolah")->first();
 
             JabatanUnsurDiajukan::create([
-                    'jabatan_diajukan_id' => $jabatan->id,
-                    'unsur_id' => $unsur->id,
-                ]);
+                'jabatan_diajukan_id' => $jabatan->id,
+                'unsur_id' => $unsur->id,
+            ]);
 
             $abkJabatan1 = $jabatan->abkJabatan()->create([
                 'abk_id' => $ajuanId,
@@ -317,8 +318,15 @@ class AnjabSeeder extends Seeder
                         'ajuan_id' => $ajuanId,
                         'uraian_tugas_diajukan_id' => $uraianTugas->id,
                         'hasil_kerja' => $tugas['hasil_kerja'],
-                        'waktu_penyelesaian' => $tugas['waktu_penyelesaian'] / 60,
+                        'waktu_penyelesaian' => floatval($tugas['waktu_penyelesaian'] / 60),
                         'jumlah_hasil_kerja' => $tugas['jumlah_hasil_kerja'],
+                    ]);
+
+                    $totalWaktuPenyelesaian = $abkJabatan1->detailAbk()->sum(DB::raw('waktu_penyelesaian * jumlah_hasil_kerja'));
+
+                    $abkJabatan1->update([
+                        'total_waktu_penyelesaian_tugas' => $totalWaktuPenyelesaian,
+                        'kebutuhan_pegawai' => ceil($totalWaktuPenyelesaian / 1250),
                     ]);
 
                     $abkJabatan2->detailAbk()->create([
@@ -329,10 +337,14 @@ class AnjabSeeder extends Seeder
                         'jumlah_hasil_kerja' => $tugas['jumlah_hasil_kerja'],
                     ]);
 
-                    
+                    $totalWaktuPenyelesaian = $abkJabatan2->detailAbk()->sum(DB::raw('waktu_penyelesaian * jumlah_hasil_kerja'));
+
+                    $abkJabatan2->update([
+                        'total_waktu_penyelesaian_tugas' => $totalWaktuPenyelesaian,
+                        'kebutuhan_pegawai' => ceil($totalWaktuPenyelesaian / 1250),
+                    ]);
                 }
             }
         }
-
     }
 }

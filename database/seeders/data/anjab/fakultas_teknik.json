@@ -48,14 +48,6 @@
         ]
     },
     {
-        "parent_id": null,
-        "nama": "Pengadministrasi Perpustakaan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengadministrasi Perpustakaan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
         "parent_id": 1,
         "nama": "Pengadministrasi Umum",
         "kode": "",
@@ -129,30 +121,6 @@
     },
     {
         "parent_id": null,
-        "nama": "Pustakawan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pustakawan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengelola Gaji",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengelola Gaji",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengolah data",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengolah data",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
         "nama": "Pengadministrasi Akademik",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Akademik",
@@ -165,22 +133,6 @@
                 "jumlah_hasil_kerja": 55
             }
         ]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengelola Perbendaharaan dan Pelayanan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengelola Perbendaharaan dan Pelayanan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Teknisi Lab.",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Teknisi Lab.",
-        "prestasi": "",
-        "tugas": [{}]
     },
     {
         "parent_id": null,
@@ -235,14 +187,6 @@
     },
     {
         "parent_id": null,
-        "nama": "Pengolah data Pengelolaan Keuangan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengolah data Pengelolaan Keuangan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
         "nama": "Pramu Bakti",
         "kode": "",
         "ikhtisar": "Ikhtisar Pramu Bakti",
@@ -255,14 +199,6 @@
                 "jumlah_hasil_kerja": 5475
             }
         ]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengadministrasi Keuangan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengadministrasi Keuangan",
-        "prestasi": "",
-        "tugas": [{}]
     },
     {
         "parent_id": null,
@@ -326,78 +262,6 @@
     },
     {
         "parent_id": null,
-        "nama": "Pembuat Daftar Gaji",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pembuat Daftar Gaji",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Penyusun Laporan Keuangan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Penyusun Laporan Keuangan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengelola Sistem dan Jaringan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengelola Sistem dan Jaringan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengolah data Tenaga Kependidikan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengolah data Tenaga Kependidikan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengadministrasi Layanan Kegiatan Kemahasiswaan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengadministrasi Layanan Kegiatan Kemahasiswaan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengolah Data Program, Anggaran, dan Laporan Keuangan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengolah Data Program, Anggaran, dan Laporan Keuangan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Pengadministrasi barang milik Undip",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Pengadministrasi barang milik Undip",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Penyusun dokumen Perencanaan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Penyusun dokumen Perencana",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Penyusun Program Anggaran dan Pelaporan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Penyusun Program Anggaran dan Pelaporan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
         "nama": "Sekretaris",
         "kode": "",
         "ikhtisar": "Ikhtisar Sekretaris",
@@ -440,14 +304,6 @@
     },
     {
         "parent_id": null,
-        "nama": "Teknisi Komputer",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Teknisi Komputer",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
         "nama": "Pengadministrasi Kepegawaian",
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Kepegawaian",
@@ -472,21 +328,5 @@
                 "jumlah_hasil_kerja": 1
             }
         ]
-    },
-    {
-        "parent_id": null,
-        "nama": "Petugas Kearsipan",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Petugas Kearsipan",
-        "prestasi": "",
-        "tugas": [{}]
-    },
-    {
-        "parent_id": null,
-        "nama": "Petugas Humas",
-        "kode": "",
-        "ikhtisar": "Ikhtisar Petugas Humas",
-        "prestasi": "",
-        "tugas": [{}]
     }
 ]

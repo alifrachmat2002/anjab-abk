@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             JabatanSeeder::class,
             UpayaFisikSeeder::class,
             JabatanUnsurSeeder::class,
-            UraianTugasSeeder::class,
+            // UraianTugasSeeder::class,
             TutamSeeder::class,
 
             AnjabSeeder::class,

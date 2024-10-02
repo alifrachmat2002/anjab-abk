@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('abk_jabatan_id')->constrained('abk_jabatan')->onDelete('cascade');
             $table->foreignId('uraian_tugas_diajukan_id')->nullable()->constrained('uraian_tugas_diajukan');
             $table->string('hasil_kerja')->nullable();
-            $table->integer('waktu_penyelesaian')->nullable();
-            $table->integer('jumlah_hasil_kerja')->nullable();
+            $table->float('waktu_penyelesaian')->nullable();
+            $table->float('jumlah_hasil_kerja')->nullable();
             $table->timestamps();
         });
     }
