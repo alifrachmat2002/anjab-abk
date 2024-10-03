@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DetailAbkResource;
 use App\Http\Resources\UraianTugasResource;
 use App\Models\AbkJabatan;
 use App\Models\DetailAbk;
 use App\Models\UraianTugas;
+use App\Models\UraianTugasDiajukan;
 use Illuminate\Http\Request;
 
 class UraianTugasController extends Controller
@@ -31,11 +33,12 @@ class UraianTugasController extends Controller
         $supervisorId = $request->supervisor_id;
         
         $abkJabatan = AbkJabatan::where('jabatan_id', $jabatanId)->where('jabatan_tutam_id', $supervisorId)->latest()->first();
-        
-        $detailAbk = DetailAbk::where('abk_jabatan_id', $abkJabatan->id)->get();
-        
-        $uraians = UraianTugas::whereIn('id', $detailAbk->pluck('uraian_tugas_diajukan_id'))->get();
-        
-        return UraianTugasResource::collection($uraians);
+
+        // Eager load uraianTugas
+        $detailAbk = DetailAbk::with('uraianTugasDiajukan')
+        ->where('abk_jabatan_id', $abkJabatan->id)
+        ->get();
+
+        return DetailAbkResource::collection($detailAbk);
     }
 }
