@@ -318,7 +318,7 @@ class AnjabSeeder extends Seeder
                         'ajuan_id' => $ajuanId,
                         'uraian_tugas_diajukan_id' => $uraianTugas->id,
                         'hasil_kerja' => $tugas['hasil_kerja'],
-                        'waktu_penyelesaian' => floatval($tugas['waktu_penyelesaian'] / 60),
+                        'waktu_penyelesaian' => $tugas['waktu_penyelesaian'],
                         'jumlah_hasil_kerja' => $tugas['jumlah_hasil_kerja'],
                     ]);
 
@@ -333,7 +333,7 @@ class AnjabSeeder extends Seeder
                         'ajuan_id' => $ajuanId,
                         'uraian_tugas_diajukan_id' => $uraianTugas->id,
                         'hasil_kerja' => $tugas['hasil_kerja'],
-                        'waktu_penyelesaian' => $tugas['waktu_penyelesaian'] / 60,
+                        'waktu_penyelesaian' => $tugas['waktu_penyelesaian'] ,
                         'jumlah_hasil_kerja' => $tugas['jumlah_hasil_kerja'],
                     ]);
 
