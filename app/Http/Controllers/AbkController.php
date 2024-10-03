@@ -276,18 +276,21 @@ class AbkController extends Controller
 
     public function storeDetailAbk(Request $request, DetailAbk $detail_abk, AbkJabatan $abk_jabatan)
     {
+        // calculate wpt by checking the satuan_waktu from uraian tugas, and converting the waktu_penyelesaian to MINUTES
+        $waktu_penyelesaian = $request->satuan_waktu == 'jam' ? $request->waktu_penyelesaian * 60 : $request->waktu_penyelesaian;
+
         $detail_abk->update([
             'hasil_kerja' => $request->hasil_kerja,
             'jumlah_hasil_kerja' => $request->jumlah_hasil_kerja,
-            'waktu_penyelesaian' => $request->waktu_penyelesaian,
+            'waktu_penyelesaian' => $waktu_penyelesaian,
         ]);
 
-        // calculate total wpt by summing the multiplication of waktu_penyelesaian and jumlah_hasil_kerja from detail abk
+        // calculate total wpt in MINUTES by summing the multiplication of waktu_penyelesaian and jumlah_hasil_kerja from detail abk
         $total_wpt = DetailAbk::where('abk_jabatan_id',$abk_jabatan->id)->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
             ->value('total_value');
 
-        // calculate kebutuhan pegawai by dividing total wpt with numbers of working hours in a year
-        $kebutuhan_pegawai_calculated = ceil($total_wpt / 1250);
+        // calculate kebutuhan pegawai by dividing total wpt with numbers of working MINUTES in a year
+        $kebutuhan_pegawai_calculated = ceil($total_wpt / 75000);
 
         // update the total wpt and kebutuhan pegawai in abk_jabatan
         $abk_jabatan->update([
