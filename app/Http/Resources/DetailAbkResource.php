@@ -13,6 +13,7 @@ class DetailAbkResource extends JsonResource
             'id' => $this->id,
             'nama_tugas' => $this->uraianTugasDiajukan ? $this->uraianTugasDiajukan->nama_tugas : null,
             'bobot' => $this->waktu_penyelesaian,
+            'target' => $this->waktu_penyelesaian * $this->jumlah_hasil_kerja,
         ];
     }
 }
