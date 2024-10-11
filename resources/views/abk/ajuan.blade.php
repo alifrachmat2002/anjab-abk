@@ -46,7 +46,7 @@
                                     $abk_unit->next_verificator()->role->name == auth()->user()->getRoleNames()->first())
                                 <div class="btn-group" role="group" aria-label="Basic example">
                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modalRevisi{{ $loop->index }}" data-ajuan="{{ $abk_unit->id }}">Revisi</button>
+                                        data-bs-target="#modalRevisi" data-ajuan="{{ $abk_unit->id }}">Revisi</button>
                                 </div>
                             @else
                                 {{-- if current verificator HAS accepted/rejected the ajuan, show them that they accepted/rejected the ajuan  --}}
@@ -74,39 +74,40 @@
                     </td>
                 </tr>
                 
-                {{-- Modal Revisi Start --}}
-                    <div class="modal fade" tabindex="-1" id="modalRevisi{{ $loop->index }}">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Beri Catatan dan Minta Revisi (Semua Jabatan)</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('abk.ajuan.revisi', ['abk' => $abk_unit,'abkparent' => $abk]) }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <input type="text" name="ajuan_id" id="inputAjuan"
-                                            value="{{ old('ajuan_id') ?? $abk_unit->id }}">
-                                        <label for="catatan" class="form-label">Berikan Catatan tentang ajuan untuk
-                                            diperbaiki</label>
-                                        <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" cols="30"
-                                            rows="10"></textarea>
-                                        @error('catatan')
-                                            <label for="catatan" class="invalid-feedback">{{ $message }}</label>
-                                        @enderror
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Simpan</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                {{-- Modal Revisi End --}}
+                
             @endforeach
 
         </tbody>
     </table>
+    {{-- Modal Revisi Start --}}
+        <div class="modal fade" tabindex="-1" id="modalRevisi">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Beri Catatan dan Minta Revisi (Semua Jabatan)</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('abk.ajuan.revisi', ['abk' => $abk_unit,'abkparent' => $abk]) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <input type="text" name="ajuan_id" id="inputAjuan"
+                                value="{{ old('ajuan_id') ?? $abk_unit->id }}" hidden>
+                            <label for="catatan" class="form-label">Berikan Catatan tentang ajuan untuk
+                                diperbaiki</label>
+                            <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" cols="30"
+                                rows="10"></textarea>
+                            @error('catatan')
+                                <label for="catatan" class="invalid-feedback">{{ $message }}</label>
+                            @enderror
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {{-- Modal Revisi End --}}
     <form action="{{ route('abk.ajuan.parent.revisi', ['abk' => $abk]) }}" method="POST">
         @csrf
         <button class="btn btn-danger mb-3" type="submit"><i class="fa-solid fa-arrow-left"></i>
@@ -114,3 +115,28 @@
     </form>
     
 @endsection
+
+@section('scripts')
+    <script>
+        const myModal = document.getElementById('modalRevisi');
+        myModal.addEventListener('show.bs.modal', event => {
+                    console.log('NJIR DIPENCET');
+                    const btn = event.relatedTarget
+                    // console.log(btn)z
+
+                    const ajuan = btn.getAttribute('data-ajuan')
+                    // console.log(ajuan)
+
+                    const inputAjuan = document.getElementById('inputAjuan');
+
+                    inputAjuan.value = ajuan;
+                })
+    </script>
+    @if($errors->any())
+        <script>
+            // const myModal = document.getElementById('modalRevisi');
+            const bootstrapModal = new bootstrap.Modal(myModal);
+            bootstrapModal.show();
+        </script>
+    @endif
+@endsection 

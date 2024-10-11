@@ -184,6 +184,7 @@ Route::prefix('/laporan')
         Route::get('/', [LaporanController::class, 'index'])->name('index');
         Route::get('/anjab/{tahun}/{anjab}', [LaporanController::class, 'showAnjab'])->name('anjab');
         Route::get('/anjab/{tahun}/{anjab}/laporan', [LaporanController::class, 'showLaporanAnjab'])->name('anjab.laporan');
+        Route::get('/anjab/{tahun}/{anjab}/laporan/download', [LaporanController::class, 'downloadLaporanAnjab'])->name('anjab.download');
         Route::get('/petajabatan/ajuan/{anjab}', [LaporanController::class, 'indexPetaJabatan'])->name('petajabatan');
         Route::get('/petajabatan/ajuan/{anjab}/unit/{unit}', [LaporanController::class, 'showUnit'])->name('petajabatan.unit');
         Route::get('/abk/{tahun}/{anjab}/', [LaporanController::class, 'showABK'])->name('abk');

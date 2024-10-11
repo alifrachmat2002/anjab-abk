@@ -277,6 +277,9 @@ class AbkController extends Controller
     public function storeDetailAbk(Request $request, DetailAbk $detail_abk, AbkJabatan $abk_jabatan)
     {
         // calculate wpt by checking the satuan_waktu from uraian tugas, and converting the waktu_penyelesaian to MINUTES
+        $request->validate([
+            'hasil_kerja' => 'required|string|max:75',
+        ]);
         $waktu_penyelesaian = $request->satuan_waktu == 'jam' ? $request->waktu_penyelesaian * 60 : $request->waktu_penyelesaian;
 
         $detail_abk->update([
