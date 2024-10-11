@@ -116,7 +116,7 @@ new class extends Component {
                                         </th>
                                         <th class="fw-semibold text-muted">Catatan Revisi</th>
                                     </thead>
-                                    @forelse ($unsur->jabatanDiajukan as $jabatan)
+                                    @forelse ($unsur->jabatanDiajukan->where('ajuan_id',$this->ajuan->id) as $jabatan)
                                         <tr wire:key="{{ $jabatan->id }}">
                                             <td>{{ $jabatan->kode == null ? 'N/A' : $jabatan->kode }}</td>
                                             <td>

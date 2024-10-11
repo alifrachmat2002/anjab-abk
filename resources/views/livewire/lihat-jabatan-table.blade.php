@@ -293,7 +293,7 @@ new class extends Component {
                     @csrf
                     <div class="modal-body">
                         <input type="text" name="ajuan_id" id="inputAjuan"
-                            value="{{ old('ajuan_id') ?? $this->ajuan->id }}">
+                            value="{{ old('ajuan_id') ?? $this->ajuan->id }}" hidden>
                         <label for="catatan" class="form-label">Berikan Catatan tentang ajuan untuk
                             diperbaiki</label>
                         <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" cols="30"

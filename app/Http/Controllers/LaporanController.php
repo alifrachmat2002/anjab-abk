@@ -8,6 +8,7 @@ use App\Models\Ajuan;
 use App\Models\JabatanDiajukan;
 use App\Models\JabatanTugasTambahan;
 use App\Models\UnitKerja;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel as Excel;
@@ -41,6 +42,17 @@ class LaporanController extends Controller
         $jabatans = JabatanDiajukan::where('ajuan_id', $anjab->id)->get();
 
         return view('laporan.anjabs', compact('title', 'jabatans'));
+    }
+
+    public function downloadLaporanAnjab($tahun, Ajuan $anjab)
+    {
+        $title = 'Laporan Jabatan' . $anjab->tahun;
+        $jabatans = JabatanDiajukan::where('ajuan_id', $anjab->id)->get();
+
+        $pdf = Pdf::loadView('laporan.anjabs', compact('title', 'jabatans'));
+
+
+        return $pdf->download('laporan-anjab-' . $anjab->tahun . '-' . $anjab->id . '.pdf');
     }
 
     public function showABK($tahun, Ajuan $anjab)

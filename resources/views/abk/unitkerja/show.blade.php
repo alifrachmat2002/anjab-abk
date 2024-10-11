@@ -19,3 +19,13 @@
     </div>
     <livewire:lihat-jabatan-abk-table :tutams="$tutams" :abk="$abkunit" :abkparent="$abk" :unit="$unit_kerja" />
 @endsection
+
+@section('scripts')
+    @if($errors->any())
+        <script>
+            const myModal = document.getElementById('modalRevisi');
+            const bootstrapModal = new bootstrap.Modal(myModal);
+            bootstrapModal.show();
+        </script>
+    @endif
+@endsection
