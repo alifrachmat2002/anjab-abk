@@ -16,3 +16,5 @@ Route::get('/jabatanabk',[AbkController::class, 'getJabatanABK'])->name('api.jab
 Route::get('/jabatanabk/parent',[AbkController::class, 'getJabatanABKParent'])->name('api.jabatanabk.parent');
 
 Route::get('/uraian-tugas-by-jabatan-and-supervisor', [App\Http\Controllers\Api\UraianTugasController::class, 'getUraianTugasByJabatanAndSupervisor']);
+
+Route::get('/yearly-total-uraian-tugas-target-by-jabatan-and-supervisor', [App\Http\Controllers\Api\UraianTugasController::class, 'getTotalUraianTugasTargetByJabatanAndSupervisor']);

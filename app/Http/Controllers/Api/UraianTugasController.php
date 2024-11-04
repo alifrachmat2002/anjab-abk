@@ -29,7 +29,7 @@ class UraianTugasController extends Controller
 
     public function getUraianTugasByJabatanAndSupervisor(Request $request)
     {
-        $jabatanId = $request->jabatan_id;
+       $jabatanId = $request->jabatan_id;
         $supervisorId = $request->supervisor_id;
         
         $abkJabatan = AbkJabatan::where('jabatan_id', $jabatanId)->where('jabatan_tutam_id', $supervisorId)->latest()->first();
@@ -40,5 +40,18 @@ class UraianTugasController extends Controller
         ->get();
 
         return DetailAbkResource::collection($detailAbk);
+    }
+
+    public function getTotalUraianTugasTargetByJabatanAndSupervisor(Request $request)
+    {
+        $detailAbk = $this->getUraianTugasByJabatanAndSupervisor($request);
+
+        $totalTarget = $detailAbk->sum(function ($item) {
+            return $item->waktu_penyelesaian * $item->jumlah_hasil_kerja;
+        });
+
+        return response()->json([
+            'total_target' => $totalTarget,
+        ]);
     }
 }
