@@ -64,20 +64,18 @@ class AnjabController extends Controller
         return view('anjab.ajuans', compact('title', 'ajuans'));
     }
 
-
     public function createJabatanDiajukan($dataJabatan, $parent_id = null)
     {
-        /* 
+        /*
     Create JabatanDiajukan instance
     
     takes the fetched Jabatan data and recursively creates JabatanDiajukan, UraianTugasDiajukan, and JabatanUnsurDiajukan instances in the database
     
-    inputs : 
+    inputs :
     - $dataJabatan : a single row of Jabatan data fetched from the 'api.jabatans' API (see php artisan route:list)
     - $parent_id : the parent_id of the JabatanDiajukan instance. If the JabatanDiajukan instance is a root, then $parent_id is null
     the function expects the $dataJabatan input to be in the tree structure (use ->toTree() method)
     */
-
 
         $createdJabatan = JabatanDiajukan::create([
             'jabatan_id' => $dataJabatan['id'],
@@ -90,7 +88,6 @@ class AnjabController extends Controller
         ]);
 
         foreach ($dataJabatan['uraian_tugas'] as $uraianTugas) {
-
             UraianTugasDiajukan::create([
                 'jabatan_diajukan_id' => $createdJabatan->id,
                 'nama_tugas' => $uraianTugas['nama_tugas'],
@@ -138,7 +135,7 @@ class AnjabController extends Controller
     {
         $ajuan = Ajuan::create([
             'tahun' => now()->year,
-            'jenis' => 'anjab'
+            'jenis' => 'anjab',
         ]);
 
         // update all JabatanUnsur where ajuan_id is null to the new ajuan_id
@@ -148,29 +145,29 @@ class AnjabController extends Controller
             'ajuan_id' => $ajuan->id,
             'user_id' => auth()->user()->id,
             'is_approved' => true,
-            'catatan' => null
+            'catatan' => null,
         ]);
 
         // After creating an ajuan, roles that can verify the ajuan
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Admin Kepegawaian')->first()->id,
-            'is_approved' => true
+            'is_approved' => true,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Manajer Kepegawaian')->first()->id,
-            'is_approved' => false
+            'is_approved' => false,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Kepala BUK')->first()->id,
-            'is_approved' => false
+            'is_approved' => false,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Wakil Rektor 2')->first()->id,
-            'is_approved' => false
+            'is_approved' => false,
         ]);
 
         $jabatans = JabatanDiajukan::where('ajuan_id', null)->get();
@@ -184,18 +181,18 @@ class AnjabController extends Controller
         return redirect()->route('anjab.ajuan.index')->with('success', 'Ajuan Jabatan berhasil diajukan');
     }
 
-  public function anjabShow(Ajuan $ajuan, $id)
-  {
-    $title = 'Ajuan Jabatan';
-    $ajuan = Ajuan::find($id);
-    $jabatans = JabatanDiajukan::where('ajuan_id', $ajuan->id)->get();
-    $unsurs = Unsur::with([
-                    'jabatanDiajukan' => function ($query) use($ajuan) {
-                        $query->where('jabatan_diajukan.ajuan_id', $ajuan->id);
-                    },
-                ])->get();
-    return view('anjab.ajuan', compact('title', 'ajuan','jabatans','unsurs', 'jabatans','unsurs' ));
-  }
+    public function anjabShow(Ajuan $ajuan, $id)
+    {
+        $title = 'Ajuan Jabatan';
+        $ajuan = Ajuan::find($id);
+        $jabatans = JabatanDiajukan::where('ajuan_id', $ajuan->id)->get();
+        $unsurs = Unsur::with([
+            'jabatanDiajukan' => function ($query) use ($ajuan) {
+                $query->where('jabatan_diajukan.ajuan_id', $ajuan->id);
+            },
+        ])->get();
+        return view('anjab.ajuan', compact('title', 'ajuan', 'jabatans', 'unsurs', 'jabatans', 'unsurs'));
+    }
 
     public function anjabEdit($tahun, $id)
     {
@@ -213,18 +210,22 @@ class AnjabController extends Controller
         // don't create jabatan if it already exists
         // instead, add the unsurs that are not already in the database
         // if jabatan exists, get the instance
-        if (JabatanDiajukan::where('nama', $request['nama'])->where('ajuan_id', $id)->exists()) {
+        if (
+            JabatanDiajukan::where('nama', $request['nama'])
+                ->where('ajuan_id', $id)
+                ->exists()
+        ) {
             // get jabatan instance of the same name
-            $jabatan = JabatanDiajukan::where('nama', $request['nama'])->where('ajuan_id', $id)->first();
+            $jabatan = JabatanDiajukan::where('nama', $request['nama'])
+                ->where('ajuan_id', $id)
+                ->first();
         } else {
             // if jabatan instance does not exist yet, create a new one
-            $jabatan = JabatanDiajukan::create(
-                [
-                    'ajuan_id' => $id,
-                    'nama' => $request['nama'],
-                    'jenis_jabatan_id' => $request['jenis_jabatan_id'],
-                ]
-            );
+            $jabatan = JabatanDiajukan::create([
+                'ajuan_id' => $id,
+                'nama' => $request['nama'],
+                'jenis_jabatan_id' => $request['jenis_jabatan_id'],
+            ]);
         }
 
         // based on the input, create instances of JabatanUnsurDiajukan
@@ -264,7 +265,7 @@ class AnjabController extends Controller
             'ajuan_id' => $ajuan->id,
             'user_id' => auth()->user()->id,
             'is_approved' => true,
-            'catatan' => null
+            'catatan' => null,
         ]);
         RoleVerifikasi::where('ajuan_id', $ajuan->id)
             ->where('role_id', auth()->user()->roles->first()->id)
@@ -282,27 +283,27 @@ class AnjabController extends Controller
         $temperamens = TemperamenKerja::all();
         $upaya_fisiks = UpayaFisik::all();
         $fungsi_pekerjaans = FungsiPekerjaan::all();
-        $checkedBakatKerja = BakatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('bakat_kerja_id')->toArray();
-        $checkedTemperamenKerja = TemperamenKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('temperamen_kerja_id')->toArray();
-        $checkedMinatKerja = MinatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('minat_kerja_id')->toArray();
-        $checkedUpayaFisik = UpayaFisikJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('upaya_fisik_id')->toArray();
-        $checkedFungsiPekerjaan = FungsiPekerjaanJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('fungsi_pekerjaan_id')->toArray();
-        return view('anjab.jabatan.show', compact(
-            'ajuan',
-            'jabatan',
-            'title',
-            'bakat_kerjas',
-            'unit_kerjas',
-            'jenis_jabatan',
-            'temperamens',
-            'upaya_fisiks',
-            'fungsi_pekerjaans',
-            'checkedBakatKerja',
-            'checkedTemperamenKerja',
-            'checkedMinatKerja',
-            'checkedUpayaFisik',
-            'checkedFungsiPekerjaan'
-        ));
+        $checkedBakatKerja = BakatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('bakat_kerja_id')
+            ->toArray();
+        $checkedTemperamenKerja = TemperamenKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('temperamen_kerja_id')
+            ->toArray();
+        $checkedMinatKerja = MinatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('minat_kerja_id')
+            ->toArray();
+        $checkedUpayaFisik = UpayaFisikJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('upaya_fisik_id')
+            ->toArray();
+        $checkedFungsiPekerjaan = FungsiPekerjaanJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('fungsi_pekerjaan_id')
+            ->toArray();
+        return view('anjab.jabatan.show', compact('ajuan', 'jabatan', 'title', 'bakat_kerjas', 'unit_kerjas', 'jenis_jabatan', 'temperamens', 'upaya_fisiks', 'fungsi_pekerjaans', 'checkedBakatKerja', 'checkedTemperamenKerja', 'checkedMinatKerja', 'checkedUpayaFisik', 'checkedFungsiPekerjaan'));
     }
 
     public function anjabEditJabatan1(Ajuan $ajuan, JabatanDiajukan $jabatan)
@@ -316,24 +317,16 @@ class AnjabController extends Controller
         $upaya_fisiks = UpayaFisik::all();
         $fungsi_pekerjaans = FungsiPekerjaan::all();
 
-        return view('anjab.jabatan.edit.step-1', compact(
-            'ajuan',
-            'jabatan',
-            'title',
-            'bakat_kerjas',
-            'unit_kerjas',
-            'jenis_jabatan',
-            'temperamens',
-            'upaya_fisiks',
-            'fungsi_pekerjaans'
-        ));
+        return view('anjab.jabatan.edit.step-1', compact('ajuan', 'jabatan', 'title', 'bakat_kerjas', 'unit_kerjas', 'jenis_jabatan', 'temperamens', 'upaya_fisiks', 'fungsi_pekerjaans'));
     }
 
     public function anjabUpdateJabatan1(Request $request, Ajuan $ajuan, JabatanDiajukan $jabatan)
     {
         $jabatan->update($request->all());
 
-        return redirect()->route('anjab.ajuan.jabatan.edit.2', ['ajuan' => $ajuan->tahun, 'jabatan' => $jabatan])->with('success', 'Data Jabatan berhasil Diubah');
+        return redirect()
+            ->route('anjab.ajuan.jabatan.edit.2', ['ajuan' => $ajuan->tahun, 'jabatan' => $jabatan])
+            ->with('success', 'Data Jabatan berhasil Diubah');
     }
 
     public function anjabEditJabatan2(Ajuan $ajuan, JabatanDiajukan $jabatan)
@@ -348,33 +341,30 @@ class AnjabController extends Controller
         $fungsiPekerjaan = FungsiPekerjaan::all();
         $minatKerja = MinatKerja::all();
 
-
         // get necessary data for checkboxes
         // checkboxes are checked if the data is found in the database
-        $checkedBakatKerja = BakatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('bakat_kerja_id')->toArray();
-        $checkedTemperamenKerja = TemperamenKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('temperamen_kerja_id')->toArray();
-        $checkedMinatKerja = MinatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('minat_kerja_id')->toArray();
-        $checkedUpayaFisik = UpayaFisikJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('upaya_fisik_id')->toArray();
-        $checkedFungsiPekerjaan = FungsiPekerjaanJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)->get()->pluck('fungsi_pekerjaan_id')->toArray();
+        $checkedBakatKerja = BakatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('bakat_kerja_id')
+            ->toArray();
+        $checkedTemperamenKerja = TemperamenKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('temperamen_kerja_id')
+            ->toArray();
+        $checkedMinatKerja = MinatKerjaJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('minat_kerja_id')
+            ->toArray();
+        $checkedUpayaFisik = UpayaFisikJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('upaya_fisik_id')
+            ->toArray();
+        $checkedFungsiPekerjaan = FungsiPekerjaanJabatanDiajukan::where('jabatan_diajukan_id', $jabatan->id)
+            ->get()
+            ->pluck('fungsi_pekerjaan_id')
+            ->toArray();
 
-        return view('anjab/jabatan/edit/step-2', compact(
-            'ajuan',
-            'title',
-            'jabatans',
-            'jabatan',
-            'bakatKerja',
-            'unitKerja',
-            'jenisJabatan',
-            'temperamen',
-            'upayaFisik',
-            'fungsiPekerjaan',
-            'minatKerja',
-            'checkedBakatKerja',
-            'checkedTemperamenKerja',
-            'checkedMinatKerja',
-            'checkedUpayaFisik',
-            'checkedFungsiPekerjaan',
-        ));
+        return view('anjab/jabatan/edit/step-2', compact('ajuan', 'title', 'jabatans', 'jabatan', 'bakatKerja', 'unitKerja', 'jenisJabatan', 'temperamen', 'upayaFisik', 'fungsiPekerjaan', 'minatKerja', 'checkedBakatKerja', 'checkedTemperamenKerja', 'checkedMinatKerja', 'checkedUpayaFisik', 'checkedFungsiPekerjaan'));
     }
 
     public function anjabUpdateJabatan2(Request $request, Ajuan $ajuan, JabatanDiajukan $jabatan)
@@ -400,7 +390,7 @@ class AnjabController extends Controller
             foreach ($bakatKerja as $bakatKerjaId) {
                 BakatKerjaJabatanDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
-                    'bakat_kerja_id' => $bakatKerjaId
+                    'bakat_kerja_id' => $bakatKerjaId,
                 ]);
             }
         }
@@ -415,7 +405,7 @@ class AnjabController extends Controller
             foreach ($temperamenKerja as $temperamenKerjaId) {
                 TemperamenKerjaJabatanDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
-                    'temperamen_kerja_id' => $temperamenKerjaId
+                    'temperamen_kerja_id' => $temperamenKerjaId,
                 ]);
             }
         }
@@ -430,7 +420,7 @@ class AnjabController extends Controller
             foreach ($minatKerja as $minatKerjaId) {
                 MinatKerjaJabatanDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
-                    'minat_kerja_id' => $minatKerjaId
+                    'minat_kerja_id' => $minatKerjaId,
                 ]);
             }
         }
@@ -445,7 +435,7 @@ class AnjabController extends Controller
             foreach ($upayaFisik as $upayaFisikId) {
                 UpayaFisikJabatanDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
-                    'upaya_fisik_id' => $upayaFisikId
+                    'upaya_fisik_id' => $upayaFisikId,
                 ]);
             }
         }
@@ -469,41 +459,45 @@ class AnjabController extends Controller
             foreach ($fungsiPekerjaan as $fungsiPekerjaanId) {
                 FungsiPekerjaanJabatanDiajukan::create([
                     'jabatan_diajukan_id' => $jabatan->id,
-                    'fungsi_pekerjaan_id' => $fungsiPekerjaanId
+                    'fungsi_pekerjaan_id' => $fungsiPekerjaanId,
                 ]);
             }
         }
 
-        return redirect()->route('anjab.ajuan.edit', ['tahun' => $ajuan->tahun, 'id' => $ajuan->id])->with('success', 'Data Jabatan berhasil Diubah');
+        return redirect()
+            ->route('anjab.ajuan.edit', ['tahun' => $ajuan->tahun, 'id' => $ajuan->id])
+            ->with('success', 'Data Jabatan berhasil Diubah');
     }
 
     public function anjabVerifikasi(Ajuan $ajuan)
     {
-        // When user accepts the ajuan, verification instance is created, 
+        // When user accepts the ajuan, verification instance is created,
         // and is_approved in RoleVerifikasi is set to true
         Verifikasi::create([
             'ajuan_id' => $ajuan->id,
             'user_id' => auth()->user()->id,
             'is_approved' => true,
-            'catatan' => null
+            'catatan' => null,
         ]);
         RoleVerifikasi::where('ajuan_id', $ajuan->id)
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => true]);
 
-        if(auth()->user()->hasRole('Wakil Rektor 2')) {
+        if (auth()->user()->hasRole('Wakil Rektor 2')) {
             $ajuan->update(['is_approved' => true]);
         }
 
-    return redirect()->route('anjab.ajuan.index')->with('success', 'Verifikasi berhasil');
-  }
+        // delete all JabatanDirevisi that doesn't have any verification id
+        JabatanDirevisi::whereNull('verifikasi_id')->delete();
 
-    // When user rejects the ajuan, verification instance is created, 
+        return redirect()->route('anjab.ajuan.index')->with('success', 'Verifikasi berhasil');
+    }
+
+    // When user rejects the ajuan, verification instance is created,
     // is_approved in RoleVerifikasi from the previous role is set to false
     // and is_approved in RoleVerifikasi from the current role is also set to false
     public function anjabRevisiAjuan(Request $request)
     {
-
         // dd(request()->all());
         $request->validate([
             'catatan' => 'required|string',
@@ -520,9 +514,11 @@ class AnjabController extends Controller
             'is_approved' => false,
         ]);
 
-
         // Get all role ids that can verify the ajuan
-        $verificatorIds = RoleVerifikasi::where('ajuan_id', $ajuan->id)->get()->pluck('role_id')->toArray();
+        $verificatorIds = RoleVerifikasi::where('ajuan_id', $ajuan->id)
+            ->get()
+            ->pluck('role_id')
+            ->toArray();
         // // Get the role id of the previous verificator
         $previousVerificatorRoleId = $verificatorIds[array_search(auth()->user()->roles->first()->id, $verificatorIds) - 1];
 
@@ -536,26 +532,25 @@ class AnjabController extends Controller
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => false]);
 
+        // create JabatanDirevisi instance to store all the jabatans that require revisions
+        foreach ($ajuan->jabatanDiajukan as $jabatan) {
+            JabatanDirevisi::create([
+                'verifikasi_id' => $verifikasi->id,
+                'jabatan_diajukan_id' => $jabatan->id,
+                'catatan' => request('catatan'),
+            ]);
+        }
 
-    // create JabatanDirevisi instance to store all the jabatans that require revisions
-    foreach ($ajuan->jabatanDiajukan as $jabatan) {
-      JabatanDirevisi::create([
-        'verifikasi_id' => $verifikasi->id,
-        'jabatan_diajukan_id' => $jabatan->id,
-        'catatan' => request('catatan')
-      ]);
+        // delete all JabatanDirevisi that doesn't have any verification id
+        JabatanDirevisi::whereNull('verifikasi_id')->delete();
+        return redirect()->route('anjab.ajuan.index')->with('success', 'Revisi berhasil');
     }
-    return redirect()->route('anjab.ajuan.index')->with('success', 'Revisi berhasil');
-  }
 
-  public function anjabRevisiJabatan(Ajuan $ajuan,Request $request)
+    public function anjabRevisiJabatan(Ajuan $ajuan, Request $request)
     {
-
         // $request->validate([
         //     'catatan' => 'required|string',
         // ]);
-        
-
 
         // dd($ajuan);
         // Create a new verification instance
@@ -565,9 +560,11 @@ class AnjabController extends Controller
             'is_approved' => false,
         ]);
 
-
         // Get all role ids that can verify the ajuan
-        $verificatorIds = RoleVerifikasi::where('ajuan_id', $ajuan->id)->get()->pluck('role_id')->toArray();
+        $verificatorIds = RoleVerifikasi::where('ajuan_id', $ajuan->id)
+            ->get()
+            ->pluck('role_id')
+            ->toArray();
         // // Get the role id of the previous verificator
         $previousVerificatorRoleId = $verificatorIds[array_search(auth()->user()->roles->first()->id, $verificatorIds) - 1];
 
@@ -581,11 +578,10 @@ class AnjabController extends Controller
             ->where('role_id', auth()->user()->roles->first()->id)
             ->update(['is_approved' => false]);
 
+        // update JabatanDirevisi instance to store all the jabatans that require revisions
+        $jabatanDirevisi = JabatanDirevisi::where('verifikasi_id', null)->update(['verifikasi_id' => $verifikasi->id]);
+        // dd($jabatanDirevisi);
 
-    // update JabatanDirevisi instance to store all the jabatans that require revisions
-    $jabatanDirevisi = JabatanDirevisi::where('verifikasi_id',null)->update(['verifikasi_id' => $verifikasi->id]);
-    // dd($jabatanDirevisi);
-
-    return redirect()->route('anjab.ajuan.index')->with('success', 'Revisi berhasil');
-  }
+        return redirect()->route('anjab.ajuan.index')->with('success', 'Revisi berhasil');
+    }
 }

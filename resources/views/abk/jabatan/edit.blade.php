@@ -16,7 +16,7 @@
                     <th class="fw-semibold text-muted" scope="col ">Uraian Tugas</th>
                     <th class="fw-semibold text-muted" scope="col ">Hasil Kerja</th>
                     <th class="fw-semibold text-muted" scope="col ">Jumlah Hasil Kerja</th>
-                    <th class="fw-semibold text-muted" scope="col ">Waktu Penyelesaian (dalam jam)</th>
+                    <th class="fw-semibold text-muted" scope="col ">Waktu Penyelesaian Tugas</th>
                     <th class="fw-semibold text-muted" scope="col ">Aksi</th>
                 </tr>
             </thead>
@@ -35,16 +35,27 @@
                             </td>
                             <td class="">
                                 {{-- create a text input and labelfor "hasil kerja" --}}
-                                <input type="text" class="form-control" name="hasil_kerja" id="hasil_kerja"
-                                    value="{{ $detail->hasil_kerja }}">
-                            </td>
-                            <td class="d-flex">
-                                <input type="text" class="form-control" name="jumlah_hasil_kerja" id="jumlah_hasil_kerja"
-                                    value="{{ $detail->jumlah_hasil_kerja }}">
+                                <input type="text" class="form-control @error('hasil_kerja') is-invalid
+                                @enderror" name="hasil_kerja" id="hasil_kerja"
+                                    value="{{ $detail->hasil_kerja }}" required>
+                                @error('hasil_kerja')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>                                    
+                                @enderror
                             </td>
                             <td class="">
-                                <input type="text" class="form-control" name="waktu_penyelesaian" id="waktu_penyelesaian"
-                                    value="{{ $detail->waktu_penyelesaian }}">
+                                <input type="number" class="form-control" name="jumlah_hasil_kerja" id="jumlah_hasil_kerja"
+                                    value="{{ old('jumlah_hasil_kerja') ?? $detail->jumlah_hasil_kerja }}" required>
+                            </td>
+                            <td class="d-flex gap-1">
+                                    <input type="number" class="form-control" name="waktu_penyelesaian" id="waktu_penyelesaian" value="{{ old('waktu_penyelesaian') ?? '' }}"
+                                        placeholder="{{ $detail->waktu_penyelesaian >= 60 ? $detail->waktu_penyelesaian / 60  : $detail->waktu_penyelesaian }}"  required>
+                                    <select class="form-select" name="satuan_waktu" id="" required>
+                                        <option value="">Pilih satuan waktu</option>
+                                        <option value="jam" @selected($detail->waktu_penyelesaian >= 60)>Jam</option>
+                                        <option value="menit" @selected($detail->waktu_penyelesaian < 60)>Menit</option>
+                                    </select>
                             </td>
                             <td class="text-center">
                                 <button type="submit" class="btn btn-primary"><i data-feather="save"></i> Simpan</button>
@@ -61,7 +72,7 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col">Total Waktu Penyelesaian Tugas (WPT)</div>
-                <div class="col">{{ $wpt }} jam</div>
+                <div class="col">{{ $wpt >= 60 ? $wpt / 60  . " jam" : $wpt . " menit" }}</div>
             </div>
             <div class="row">
                 <div class="col">Total Waktu Kerja Efektif</div>

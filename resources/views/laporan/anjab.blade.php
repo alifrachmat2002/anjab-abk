@@ -13,7 +13,7 @@
     </div>
     <div class="mb-3 btn-group">
         <a target="_blank" href="{{ route('laporan.anjab.laporan', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Lihat Laporan Lengkap</a>
-        <a download href="{{ route('laporan.anjab.laporan', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Unduh Laporan Lengkap</a>
+        {{-- <a target="_blank" href="{{ route('laporan.anjab.download', ['anjab' => $anjab, 'tahun' => $anjab->tahun]) }}" class="btn btn-outline-primary">Unduh Laporan Lengkap</a> --}}
     </div>
     <div class="mb-3">
         {{-- <livewire:laporan-anjab-jabatan :jabatans="$jabatans"/> --}}

@@ -32,7 +32,7 @@
                             {{ $detail->jumlah_hasil_kerja }}
                         </td>
                         <td class="">
-                            {{ $detail->waktu_penyelesaian }}
+                            {{ $detail->waktu_penyelesaian >= 60 ? $detail->waktu_penyelesaian / 60  . " jam" : $detail->waktu_penyelesaian . " menit" }}
                         </td>
                     </tr>
                 @endforeach
@@ -45,7 +45,7 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col">Total Waktu Penyelesaian Tugas (WPT)</div>
-                <div class="col">{{ $wpt }} jam</div>
+                <div class="col">{{ $wpt >= 60 ? $wpt / 60  . " jam" : $wpt . " menit" }}</div>
             </div>
             <div class="row">
                 <div class="col">Total Waktu Kerja Efektif</div>
