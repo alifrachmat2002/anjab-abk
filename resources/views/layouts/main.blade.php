@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Anjab-ABK | {{ $title }}</title>
+    <title>NADINE | {{ $title }}</title>
 
     {{-- add a custom icon  --}}
     <link rel="icon" href="{{ asset('assets/undip-logo.png') }}" type="image/png" />
