@@ -9,10 +9,10 @@
         </div>
     @endif
     <div class="justify-content-start text-center">
-        <img src={{ asset('assets/undip-logo-cropped.svg') }} width="100" class="" alt="">
+        <img src={{ asset('assets/logo-dsdm.png') }} width="150" class="" alt="">
         <div class="d-flex flex-column my-3 gap-1">
-            <h1 class="card-title display-6">Anjab ABK</h1>
-            <p class="m-0">Selamat datang di Aplikasi Anjab ABK <br> Universitas Diponegoro</p>
+            <h1 class="card-title display-6">NADINE</h1>
+            <p class="m-0">Perencanaan Dosen dan Tendik<br> Universitas Diponegoro</p>
             {{-- <p class="m-0">Silakan masuk untuk melanjutkan</p> --}}
         </div>
         
