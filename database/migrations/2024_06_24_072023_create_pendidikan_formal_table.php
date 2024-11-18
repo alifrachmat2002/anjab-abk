@@ -13,8 +13,8 @@ return new class extends Migration
   {
     Schema::create('pendidikan_formal', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('kualifikasi_jabatan_id')->constrained('jabatan');
-      $table->enum('jenjang', ['D3', 'S1', 'S2', 'S3']);
+      $table->foreignId('jabatan_id')->constrained('jabatan');
+      $table->string('jenjang');
       $table->string('jurusan');
       $table->timestamps();
     });
