@@ -5,6 +5,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pranata Lab. Pendidikan",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Menyusun program tahunan pengelolaan laboratorium sebagai anggota",
@@ -32,9 +38,15 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Informasi Akademik",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
-                "nama_tugas": "Menyusun laporan kegiatan akademik kepada atasan sebagaibahan evaluasi dan pertanggungjawaban",
+                "nama_tugas": "Menyusun laporan kegiatan akademik kepada atasan sebagai bahan evaluasi dan pertanggungjawaban",
                 "hasil_kerja": "kegiatan",
                 "waktu_penyelesaian": 200,
                 "jumlah_hasil_kerja": 10
@@ -53,6 +65,12 @@
         "kode": "",
         "ikhtisar": "",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Membuat laporan rekapitulasi pemasukan barang tiap bulan",
@@ -92,6 +110,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Barang Milik Negara",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Membuat laporan penghapusan barang",
@@ -125,6 +149,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Akademik",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Menerima dan mencatat dokumen akademik surat masuk dan keluar",
@@ -140,6 +170,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pengelola Keuangan",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Membuat laporan perpajakan",
@@ -191,6 +227,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pramu Bakti",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Membuat tanda terima pengiriman surat",
@@ -206,6 +248,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Teknisi Peralatan Kantor",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "membuat laporan keursakan dan pemeliharaan gedung dan bangunan",
@@ -227,6 +275,12 @@
         "kode": "",
         "ikhtisar": "Pengadministrasi Persuratan",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Menerima surat masuk dari luar fakultas",
@@ -266,6 +320,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Sekretaris",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Mengelola surat masuk dekan",
@@ -287,6 +347,12 @@
         "kode": "",
         "ikhtisar": "",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Mengonsep Surat Keputusan",
@@ -308,6 +374,12 @@
         "kode": "",
         "ikhtisar": "Ikhtisar Pengadministrasi Kepegawaian",
         "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50,
         "tugas": [
             {
                 "nama_tugas": "Menyiapkan bahan sosialisas tugas belajar dan aturan tugas belajar",

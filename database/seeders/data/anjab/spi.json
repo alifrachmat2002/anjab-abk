@@ -4,48 +4,90 @@
         "nama": "Penyusun Rencana Keuangan",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Pengelola Data dan Informasi",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Bendahara",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Analis Bidang Pengawasan",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Pengadministrasi Umum",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Pengadministrasi data Peraturan Perundang-undangan",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     },
     {
         "parent_id": 1,
         "nama": "Teknisi Sarana dan Prasarana",
         "kode": "",
         "ikhtisar": "",
-        "prestasi": ""
+        "prestasi": "",
+        "jenis_kelamin": "L",
+        "umur": 22,
+        "tinggi_badan": 160,
+        "penampilan": "Rapi",
+        "keterampilan": "Berkomunikasi",
+        "berat_badan": 50
     }
 ]
