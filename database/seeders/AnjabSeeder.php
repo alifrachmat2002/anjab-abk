@@ -281,7 +281,6 @@ class AnjabSeeder extends Seeder
 
             $jabatan = JabatanDiajukan::create([
                 'ajuan_id' => $ajuan->id,
-                'jabatan_id' => Jabatan::where('nama', $data['nama'])->first()->id,
                 'nama' => $data['nama'],
                 'kode' => $data['kode'],
                 'ikhtisar' => $data['ikhtisar'],
