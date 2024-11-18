@@ -54,12 +54,12 @@ new class extends Component {
 
 <div class="mb-3">
     <label for="perangkat_kerja" class="form-label">Perangkat Kerja</label>
-    <table class="table table-bordered w-75" id="PerangkatKerja">
+    <table class="table table-bordered" id="PerangkatKerja">
         <thead class="table-secondary">
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Perangkat Kerja</th>
             <th>Penggunaan dalam pekerjaan</th>
-            <th>Aksi</th>
+            <th style="width: 125px;">Aksi</th>
         </thead>
         <tbody>
             @foreach ($jabatan->perangkatKerja as $perangkatKerja)

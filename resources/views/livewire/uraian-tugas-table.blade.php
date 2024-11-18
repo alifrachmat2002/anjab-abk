@@ -51,12 +51,12 @@ new class extends Component {
 }; ?>
 
 <div class="mb-3">
-    <table class="table table-bordered w-75" id="uraian_tugas">
+    <table class="table table-bordered" id="uraian_tugas">
         <caption class="caption-top text-black">Uraian Tugas</caption>
         <thead class="table-info">
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Uraian Tugas</th>
-            <th>Aksi</th>
+            <th style="width: 125px;">Aksi</th>
         </thead>
         <tbody>
             @foreach ($jabatan->uraianTugas as $uraian)
@@ -102,7 +102,7 @@ new class extends Component {
                             placeholder="Masukkan Uraian Tugas" wire:model="uraian">
                     </td>
                     <td>
-                        <button type="submit" class="btn btn-primary" wire:click="addUraianTugas()"><i class="fa-solid fa-plus"></i>
+                        <button type="submit" class="btn btn-primary " wire:click="addUraianTugas()"><i class="fa-solid fa-plus"></i>
                             Tambah
                         </button>
                     </td>

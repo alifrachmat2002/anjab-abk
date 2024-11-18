@@ -12,7 +12,7 @@ with([
 <div>
     <table class="table table-striped table-bordered">
         <thead>
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Nama User</th>
             <th>Role</th>
             <th>User</th>

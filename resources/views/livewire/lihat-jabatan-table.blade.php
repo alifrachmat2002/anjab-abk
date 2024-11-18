@@ -36,7 +36,7 @@ new class extends Component {
                     Unsur
                     @can('verify anjab')
                         {{--  show buttons only when next verificator is the current user  --}}
-                        @if ($this->ajuan->next_verificator()->role->name == auth()->user()->getRoleNames()->first())
+                        @if ($this->ajuan->next_verificator()?->role->name == auth()->user()->getRoleNames()->first())
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
                                     data-bs-target="#modalTerima">Terima Semua Jabatan</button>

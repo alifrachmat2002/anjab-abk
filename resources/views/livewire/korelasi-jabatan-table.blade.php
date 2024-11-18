@@ -64,10 +64,10 @@ new class extends Component {
     <label for="korelasi_jabatan" class="form-label">Korelasi Jabatan</label>
     <table class="table table-bordered" id="korelasi_jabatan">
         <thead class="table-info">
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Jabatan</th>
             <th>Dalam Hal</th>
-            <th>Aksi</th>
+            <th style="width: 125px;">Aksi</th>
         </thead>
         <tbody>
             @foreach ($jabatan->korelasiJabatan as $korelasi)

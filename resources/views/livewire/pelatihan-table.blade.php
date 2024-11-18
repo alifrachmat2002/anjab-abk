@@ -55,12 +55,12 @@ new class extends Component {
 }; ?>
 
 <div>
-    <table class="table table-bordered w-75" id="pelatihan">
+    <table class="table table-bordered" id="pelatihan">
         <caption class="caption-top"> Kualifikasi Jabatan | Pelatihan</caption>
         <thead class="table-primary">
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Jenis Pelatihan</th>
-            <th>Aksi</th>
+            <th style="width: 125px;">Aksi</th>
         </thead>
         <tbody>
             @foreach ($jabatan->pendidikanPelatihan as $pelatihan)

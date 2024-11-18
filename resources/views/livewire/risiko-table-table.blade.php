@@ -57,12 +57,12 @@ new class extends Component {
 <div class="mb-3">
     <label for="risiko_bahaya" class="form-label">Risiko Bahaya</label>
     <table class="table 
-                table-bordered w-75" id="risiko_bahaya">
+                table-bordered" id="risiko_bahaya">
         <thead class="table-danger">
-            <th>No</th>
+            <th style="width: 50px;">No</th>
             <th>Risiko bahaya</th>
             <th>Penyebab</th>
-            <th>Aksi</th>
+            <th style="width: 125px;">Aksi</th>
         </thead>
         <tbody>
             @foreach ($jabatan->risikoBahaya as $risikoBahaya)
