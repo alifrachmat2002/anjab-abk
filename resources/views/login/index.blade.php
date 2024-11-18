@@ -4,7 +4,7 @@
 <div class="container shadow rounded-3 col-lg-4 p-3 mt-5">
     @if (session()->has('loginError'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <small>{{ session('loginError') }}</small>
+            <p class="m-0 fs-6">{{ session('loginError') }}</p>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif

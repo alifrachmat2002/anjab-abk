@@ -80,14 +80,20 @@
                                     <div class="btn-group" role="group" aria-label="Basic example">
                                         <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
                                             class="btn btn-outline-primary">Lihat</a>
-                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                            data-bs-target="#modalTerima{{ $loop->index }}">Terima</button>
+                                        @if (!$ajuan->hasChildrenRejectedByUser())
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#modalTerima{{ $loop->index }}">Terima</button>
+                                        @endif
                                     </div>
                                 @else
                                     {{-- if current verificator HAS accepted/rejected the ajuan, show them that they accepted/rejected the ajuan  --}}
                                     @if (!empty($ajuan->latest_verifikasi_by_current_user))
                                         @if ($ajuan->latest_verifikasi_by_current_user->is_approved)
-                                            <p class="badge text-bg-success">Anda sudah menerima Ajuan ini</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p class="badge text-bg-success m-0">Anda sudah menerima Ajuan ini</p>
+                                            <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
+                                            class="btn btn-outline-primary">Lihat</a>
+                                        </div>
                                             @if (!empty($ajuan->next_verificator()))
                                                 <div class="alert alert-info w-100">
                                                     <div class="alert-heading d-flex">
@@ -102,6 +108,8 @@
                                             @endif
                                         @else
                                             <span class="badge text-bg-danger">Anda sudah merevisi Ajuan ini</span>
+                                            <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
+                                            class="btn btn-outline-primary">Lihat</a>
                                         @endif
                                     @endif
                                 @endif

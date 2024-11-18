@@ -67,13 +67,15 @@ class Ajuan extends Model
         $previousVerificatorId = Role::where('name', 'Kepala BUK')->first()->id;
         $roleId = auth()->user()->id;
         return Ajuan::where('jenis', 'anjab')
-            ->whereHas('role_verifikasi', function ($query) use ($previousVerificatorId) {
-                $query->where('role_id', $previousVerificatorId)->where('is_approved', true);
-            })
-            ->orWhereHas('verifikasi', function ($query) use ($roleId) {
-                $query->whereHas('user', function ($query) use ($roleId) {
-                    $query->where('id', $roleId);
-                });
+            ->where(function ($query) use ($previousVerificatorId, $roleId) {
+                $query->whereHas('role_verifikasi', function ($query) use ($previousVerificatorId) {
+                    $query->where('role_id', $previousVerificatorId)->where('is_approved', true);
+                })
+                    ->orWhereHas('verifikasi', function ($query) use ($roleId) {
+                        $query->whereHas('user', function ($query) use ($roleId) {
+                            $query->where('id', $roleId);
+                        });
+                    });
             })
             ->get();
     }
@@ -181,7 +183,8 @@ class Ajuan extends Model
     }
 
     // return the count of abk_unit that is verified/rejected by user
-    public function hasChildrenAbkCheckedByUser(){
+    public function hasChildrenAbkCheckedByUser()
+    {
         return $this->children()->whereHas('verifikasi', function ($query) {
             $query->where('user_id', auth()->user()->id);
         })->count();
@@ -193,10 +196,11 @@ class Ajuan extends Model
 
     // output :
     // count of abk_unit of an abk that is rejected by user
-    public function hasChildrenRejectedByUser() {
+    public function hasChildrenRejectedByUser()
+    {
         return $this->children()->whereHas('latest_verifikasi_by_current_user', function ($query) {
-                $query->where('is_approved', false);
-            })
+            $query->where('is_approved', false);
+        })
             ->count();
     }
 
@@ -231,11 +235,11 @@ class Ajuan extends Model
                         $subQuery->where('role_id', $previousVerificatorId)
                             ->where('is_approved', true);
                     })
-                    ->orWhereHas('verifikasi', function ($subQuery) use ($roleId) {
-                        $subQuery->whereHas('user', function ($userQuery) use ($roleId) {
-                            $userQuery->where('id', $roleId);
+                        ->orWhereHas('verifikasi', function ($subQuery) use ($roleId) {
+                            $subQuery->whereHas('user', function ($userQuery) use ($roleId) {
+                                $userQuery->where('id', $roleId);
+                            });
                         });
-                    });
                 })
                 ->get();
         }
@@ -257,15 +261,18 @@ class Ajuan extends Model
         return $this->hasMany(AbkUnitKerja::class, 'abk_id');
     }
 
-    public function unitKerja() {
+    public function unitKerja()
+    {
         return $this->belongsToMany(UnitKerja::class, 'abk_unit_kerja', 'abk_id', 'unit_kerja_id');
     }
 
-    public function jabatanDiajukan() {
+    public function jabatanDiajukan()
+    {
         return $this->hasMany(JabatanDiajukan::class);
     }
 
-    public function abkJabatan() {
-        return $this->hasMany(AbkJabatan::class,'abk_id');
+    public function abkJabatan()
+    {
+        return $this->hasMany(AbkJabatan::class, 'abk_id');
     }
 }
