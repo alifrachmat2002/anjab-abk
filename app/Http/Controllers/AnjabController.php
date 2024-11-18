@@ -111,7 +111,7 @@ class AnjabController extends Controller
         // check if there is an ajuan draft
         if (!JabatanDiajukan::is_draft_exist()) {
             // if no draft exists, fetch the JSON data
-            $response = Http::get('http://anjab-abk.test/api/jabatans');
+            $response = Http::get('https://nadine.dsdmundip.com/api/jabatans');
             // if the request isn't successful or the data isn't found, redirect back with an error message
             if (!$response->successful() || !isset($response['data'])) {
                 return redirect()->back()->with('error', 'Data Jabatan tidak ditemukan');
