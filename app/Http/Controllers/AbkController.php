@@ -7,19 +7,35 @@ use App\Models\AbkJabatan;
 use App\Models\AbkUnitKerja;
 use App\Models\Ajuan;
 use App\Models\AjuanUnitKerja;
+use App\Models\BahanKerja;
+use App\Models\BakatKerjaJabatan;
 use App\Models\DetailAbk;
+use App\Models\FungsiPekerjaanJabatan;
 use App\Models\Jabatan;
 use App\Models\JabatanDiajukan;
 use App\Models\JabatanDirevisi;
 use App\Models\JabatanTugasTambahan;
+use App\Models\JabatanUnsur;
+use App\Models\KorelasiJabatan;
+use App\Models\MinatKerjaJabatan;
+use App\Models\PendidikanFormal;
+use App\Models\PendidikanPelatihan;
+use App\Models\Pengalaman;
+use App\Models\PerangkatKerja;
+use App\Models\RisikoBahaya;
 use App\Models\Role;
 use App\Models\RoleVerifikasi;
+use App\Models\TanggungJawab;
+use App\Models\TemperamenKerjaJabatan;
 use App\Models\UnitKerja;
+use App\Models\UpayaFisikJabatan;
 use App\Models\UraianTugas;
 use App\Models\UraianTugasDiajukan;
 use App\Models\User;
 use App\Models\Verifikasi;
+use App\Models\Wewenang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AbkController extends Controller
 {
@@ -260,7 +276,7 @@ class AbkController extends Controller
         $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
         $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'kebutuhan_pegawai' ,'detail_abk', 'unit_kerja'));
+        return view('abk.jabatan.show', compact('title', 'abk', 'jabatan', 'wpt', 'kebutuhan_pegawai', 'detail_abk', 'unit_kerja'));
     }
 
     public function editJabatan(Ajuan $abk, UnitKerja $unit_kerja, AbkJabatan $abk_jabatan)
@@ -271,7 +287,7 @@ class AbkController extends Controller
         $wpt = $abk_jabatan->total_waktu_penyelesaian_tugas;
         $kebutuhan_pegawai = $abk_jabatan->kebutuhan_pegawai;
 
-        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan','kebutuhan_pegawai'));
+        return view('abk.jabatan.edit', compact('title', 'unit_kerja', 'abk', 'jabatan', 'uraians', 'wpt', 'abk_jabatan', 'kebutuhan_pegawai'));
     }
 
     public function storeDetailAbk(Request $request, DetailAbk $detail_abk, AbkJabatan $abk_jabatan)
@@ -289,7 +305,7 @@ class AbkController extends Controller
         ]);
 
         // calculate total wpt in MINUTES by summing the multiplication of waktu_penyelesaian and jumlah_hasil_kerja from detail abk
-        $total_wpt = DetailAbk::where('abk_jabatan_id',$abk_jabatan->id)->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
+        $total_wpt = DetailAbk::where('abk_jabatan_id', $abk_jabatan->id)->selectRaw('SUM(waktu_penyelesaian * jumlah_hasil_kerja) as total_value')
             ->value('total_value');
 
         // calculate kebutuhan pegawai by dividing total wpt with numbers of working MINUTES in a year
@@ -319,6 +335,7 @@ class AbkController extends Controller
 
         return redirect()->route('abk.ajuans')->with('success', 'Ajuan ABK berhasil disimpan');
     }
+
     public function abkParentVerifikasi(Ajuan $abk)
     {
         // When user accepts the ajuan, verification instance is created,
@@ -336,6 +353,8 @@ class AbkController extends Controller
 
         if ($userIsWakilRektor) {
             $abk->update(['is_approved' => true]);
+
+            $this->updateJabatanReferensi();
         }
 
         foreach ($abk->children as $child) {
@@ -529,6 +548,7 @@ class AbkController extends Controller
         }
         return response()->json(['jabatans' => $response]);
     }
+
     public function getJabatanABKParent()
     {
         $parent = Ajuan::find(request('ajuan'))->children->pluck('id');
@@ -544,5 +564,226 @@ class AbkController extends Controller
             ];
         }
         return response()->json(['jabatans' => $response]);
+    }
+
+    private function updateJabatanReferensi()
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        PendidikanFormal::truncate();
+        PendidikanPelatihan::truncate();
+        Pengalaman::truncate();
+        UraianTugas::truncate();
+        BahanKerja::truncate();
+        PerangkatKerja::truncate();
+        TanggungJawab::truncate();
+        Wewenang::truncate();
+        KorelasiJabatan::truncate();
+        RisikoBahaya::truncate();
+        JabatanUnsur::truncate();
+        BakatKerjaJabatan::truncate();
+        TemperamenKerjaJabatan::truncate();
+        MinatKerjaJabatan::truncate();
+        FungsiPekerjaanJabatan::truncate();
+        UpayaFisikJabatan::truncate();
+
+        Jabatan::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $latestAjuanId = JabatanDiajukan::max('ajuan_id');
+        $jabatanDiajukan = JabatanDiajukan::with([
+            'pendidikanFormal',
+            'pendidikanPelatihan',
+            'pengalaman',
+            'uraianTugas',
+            'bahanKerja',
+            'perangkatKerja',
+            'tanggungJawab',
+            'wewenang',
+            'korelasiJabatan',
+            'risikoBahaya',
+            'jabatanUnsur',
+            'bakatKerja',
+            'temperamenKerja',
+            'minatKerja',
+            'fungsiPekerjaan',
+            'upayaFisik',
+        ])->where('ajuan_id', $latestAjuanId)->get();
+
+        foreach ($jabatanDiajukan as $jabatanDiajukan) {
+            $jabatan = Jabatan::create([
+                'parent_id' => $jabatanDiajukan->parent_id,
+                'nama' => $jabatanDiajukan->nama,
+                'kode' => $jabatanDiajukan->kode,
+                'ikhtisar' => $jabatanDiajukan->ikhtisar,
+                'prestasi' => $jabatanDiajukan->prestasi,
+                'jenis_kelamin' => $jabatanDiajukan->jenis_kelamin,
+                'umur' => $jabatanDiajukan->umur,
+                'tinggi_badan' => $jabatanDiajukan->tinggi_badan,
+                'postur_badan' => $jabatanDiajukan->postur_badan,
+                'penampilan' => $jabatanDiajukan->penampilan,
+                'keterampilan' => $jabatanDiajukan->keterampilan,
+                'berat_badan' => $jabatanDiajukan->berat_badan,
+                'getaran' => $jabatanDiajukan->getaran,
+                'suhu' => $jabatanDiajukan->suhu,
+                'suara' => $jabatanDiajukan->suara,
+                'penerangan' => $jabatanDiajukan->penerangan,
+                'letak' => $jabatanDiajukan->letak,
+                'tempat' => $jabatanDiajukan->tempat,
+                'udara' => $jabatanDiajukan->udara,
+                'keadaan_ruangan' => $jabatanDiajukan->keadaan_ruangan,
+                'uraian_tugas' => $jabatanDiajukan->uraian_tugas,
+                'unsur_id' => $jabatanDiajukan->unsur_id,
+            ]);
+
+            if ($jabatanDiajukan->pendidikanFormal) {
+                foreach ($jabatanDiajukan->pendidikanFormal as $pendidikanFormal) {
+                    PendidikanFormal::create([
+                        'jabatan_id' => $jabatan->id,
+                        'jenjang' => $pendidikanFormal->jenjang,
+                        'jurusan' => $pendidikanFormal->jurusan,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->pendidikanPelatihan) {
+                foreach ($jabatanDiajukan->pendidikanPelatihan as $pendidikanPelatihan) {
+                    PendidikanPelatihan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $pendidikanPelatihan->nama,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->pengalaman) {
+                foreach ($jabatanDiajukan->pengalaman as $pengalaman) {
+                    Pengalaman::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $pengalaman->nama,
+                        'lama' => $pengalaman->lama,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->uraianTugas) {
+                foreach ($jabatanDiajukan->uraianTugas as $uraianTugas) {
+                    UraianTugas::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama_tugas' => $uraianTugas->nama_tugas,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->bahanKerja) {
+                foreach ($jabatanDiajukan->bahanKerja as $bahanKerja) {
+                    BahanKerja::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $bahanKerja->nama,
+                        'penggunaan' => $bahanKerja->penggunaan,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->perangkatKerja) {
+                foreach ($jabatanDiajukan->perangkatKerja as $perangkatKerja) {
+                    PerangkatKerja::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $perangkatKerja->nama,
+                        'penggunaan' => $perangkatKerja->penggunaan,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->tanggungJawab) {
+                foreach ($jabatanDiajukan->tanggungJawab as $tanggungJawab) {
+                    TanggungJawab::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $tanggungJawab->nama,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->wewenang) {
+                foreach ($jabatanDiajukan->wewenang as $wewenang) {
+                    Wewenang::create([
+                        'jabatan_id' => $jabatan->id,
+                        'nama' => $wewenang->nama,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->korelasiJabatan) {
+                foreach ($jabatanDiajukan->korelasiJabatan as $korelasiJabatan) {
+                    KorelasiJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'jabatan_relasi_id' => $korelasiJabatan->jabatan_relasi_id,
+                        'dalam_hal' => $korelasiJabatan->dalam_hal,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->risikoBahaya) {
+                foreach ($jabatanDiajukan->risikoBahaya as $risikoBahaya) {
+                    RisikoBahaya::create([
+                        'jabatan_id' => $jabatan->id,
+                        'bahaya_fisik' => $risikoBahaya->bahaya_fisik,
+                        'penyebab' => $risikoBahaya->penyebab,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->jabatanUnsur) {
+                foreach ($jabatanDiajukan->jabatanUnsur as $jabatanUnsur) {
+                    JabatanUnsur::create([
+                        'jabatan_id' => $jabatan->id,
+                        'unsur_id' => $jabatanUnsur->unsur_id,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->bakatKerja) {
+                foreach ($jabatanDiajukan->bakatKerja as $bakatKerja) {
+                    BakatKerjaJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'bakat_kerja_id' => $bakatKerja->bakat_kerja_id,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->temperamenKerja) {
+                foreach ($jabatanDiajukan->temperamenKerja as $temperamenKerja) {
+                    TemperamenKerjaJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'temperamen_kerja_id' => $temperamenKerja->temperamen_kerja_id,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->minatKerja) {
+                foreach ($jabatanDiajukan->minatKerja as $minatKerja) {
+                    MinatKerjaJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'minat_kerja_id' => $minatKerja->minat_kerja_id,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->fungsiPekerjaan) {
+                foreach ($jabatanDiajukan->fungsiPekerjaan as $fungsiPekerjaan) {
+                    FungsiPekerjaanJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'fungsi_pekerjaan_id' => $fungsiPekerjaan->fungsi_pekerjaan_id,
+                    ]);
+                }
+            }
+
+            if ($jabatanDiajukan->upayaFisik) {
+                foreach ($jabatanDiajukan->upayaFisik as $upayaFisik) {
+                    UpayaFisikJabatan::create([
+                        'jabatan_id' => $jabatan->id,
+                        'upaya_fisik_id' => $upayaFisik->upaya_fisik_id,
+                    ]);
+                }
+            }
+        }
     }
 }
