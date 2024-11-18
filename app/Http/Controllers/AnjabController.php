@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateJabatanRequest;
 use App\Models\Ajuan;
 use App\Models\AjuanJabatan;
+use App\Models\BahanKerjaDiajukan;
 use App\Models\BakatKerja;
 use App\Models\BakatKerjaJabatanDiajukan;
 use App\Models\FungsiPekerjaan;
@@ -15,9 +16,15 @@ use App\Models\JabatanDirevisi;
 use App\Models\JabatanUnsurDiajukan;
 use App\Models\JenisJabatan;
 use App\Models\KondisiLingkunganKerja;
+use App\Models\KorelasiJabatanDiajukan;
 use App\Models\KualifikasiJabatan;
 use App\Models\MinatKerja;
 use App\Models\MinatKerjaJabatanDiajukan;
+use App\Models\PendidikanFormalDiajukan;
+use App\Models\PendidikanPelatihanDiajukan;
+use App\Models\PengalamanDiajukan;
+use App\Models\PerangkatKerjaDiajukan;
+use App\Models\RisikoBahayaDiajukan;
 use App\Models\Role;
 use App\Models\RoleVerifikasi;
 use App\Models\SyaratBakat;
@@ -26,6 +33,7 @@ use App\Models\SyaratJabatan;
 use App\Models\SyaratMinat;
 use App\Models\SyaratTemperamen;
 use App\Models\SyaratUpaya;
+use App\Models\TanggungJawabDiajukan;
 use App\Models\TemperamenKerja;
 use App\Models\TemperamenKerjaJabatanDiajukan;
 use App\Models\UnitKerja;
@@ -36,6 +44,7 @@ use App\Models\UraianTugas;
 use App\Models\UraianTugasDiajukan;
 use App\Models\User;
 use App\Models\Verifikasi;
+use App\Models\WewenangDiajukan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -100,7 +109,108 @@ class AnjabController extends Controller
                 'unsur_id' => $unsur['id'],
             ]);
         }
+
+        foreach ($dataJabatan['pendidikan_formal'] as $pendidikanFormal) {
+            PendidikanFormalDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'jenjang' => $pendidikanFormal['jenjang'],
+                'jurusan' => $pendidikanFormal['jurusan'],
+            ]);
+        }
+
+        foreach ($dataJabatan['pendidikan_pelatihan'] as $pendidikanPelatihan) {
+            PendidikanPelatihanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $pendidikanPelatihan['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['pengalaman'] as $pengalaman) {
+            PengalamanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'lama' => $pengalaman['lama'],
+                'nama' => $pengalaman['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['bahan_kerja'] as $bahanKerja) {
+            BahanKerjaDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $bahanKerja['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['perangkat_kerja'] as $perangkatKerja) {
+            PerangkatKerjaDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $perangkatKerja['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['tanggung_jawab'] as $tanggungJawab) {
+            TanggungJawabDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $tanggungJawab['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['wewenang'] as $wewenang) {
+            WewenangDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $wewenang['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['korelasi_jabatan'] as $korelasiJabatan) {
+            KorelasiJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $korelasiJabatan['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['risiko_bahaya'] as $risikoBahaya) {
+            RisikoBahayaDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'nama' => $risikoBahaya['nama'],
+            ]);
+        }
+
+        foreach ($dataJabatan['bakat_kerja'] as $bakatKerja) {
+            BakatKerjaJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'bakat_kerja_id' => $bakatKerja['bakat_kerja_id'],
+            ]);
+        }
+
+        foreach ($dataJabatan['temperamen_kerja'] as $temperamenKerja) {
+            TemperamenKerjaJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'temperamen_kerja_id' => $temperamenKerja['temperamen_kerja_id'],
+            ]);
+        }
+
+        foreach ($dataJabatan['minat_kerja'] as $minatKerja) {
+            MinatKerjaJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'minat_kerja_id' => $minatKerja['minat_kerja_id'],
+            ]);
+        }
+
+        foreach ($dataJabatan['fungsi_pekerjaan'] as $fungsiPekerjaan) {
+            FungsiPekerjaanJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'fungsi_pekerjaan_id' => $fungsiPekerjaan['fungsi_pekerjaan_id'],
+            ]);
+        }
+
+        foreach ($dataJabatan['upaya_fisik'] as $upayaFisik) {
+            UpayaFisikJabatanDiajukan::create([
+                'jabatan_diajukan_id' => $createdJabatan->id,
+                'upaya_fisik_id' => $upayaFisik['upaya_fisik_id'],
+            ]);
+        }
     }
+    
     public function anjabCreate()
     {
         $title = 'Buat Ajuan Baru';
@@ -112,13 +222,13 @@ class AnjabController extends Controller
         if (!JabatanDiajukan::is_draft_exist()) {
             // if no draft exists, fetch the JSON data
             $response = Http::get('http://anjab-abk.test/api/jabatans');
+
             // if the request isn't successful or the data isn't found, redirect back with an error message
             if (!$response->successful() || !isset($response['data'])) {
                 return redirect()->back()->with('error', 'Data Jabatan tidak ditemukan');
             }
 
             $jabatans = $response['data'];
-            // dd($jabatans);
 
             foreach ($jabatans as $dataJabatan) {
                 $this->createJabatanDiajukan($dataJabatan);
@@ -157,17 +267,17 @@ class AnjabController extends Controller
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Manajer Kepegawaian')->first()->id,
-            'is_approved' => false,
+            'is_approved' => true,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Kepala BUK')->first()->id,
-            'is_approved' => false,
+            'is_approved' => true,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Wakil Rektor 2')->first()->id,
-            'is_approved' => false,
+            'is_approved' => true,
         ]);
 
         $jabatans = JabatanDiajukan::where('ajuan_id', null)->get();
