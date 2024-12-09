@@ -137,6 +137,7 @@ class AnjabController extends Controller
             BahanKerjaDiajukan::create([
                 'jabatan_diajukan_id' => $createdJabatan->id,
                 'nama' => $bahanKerja['nama'],
+                'penggunaan' => $bahanKerja['penggunaan'],
             ]);
         }
 
@@ -144,6 +145,7 @@ class AnjabController extends Controller
             PerangkatKerjaDiajukan::create([
                 'jabatan_diajukan_id' => $createdJabatan->id,
                 'nama' => $perangkatKerja['nama'],
+                'penggunaan' => $perangkatKerja['penggunaan'],
             ]);
         }
 
@@ -164,14 +166,16 @@ class AnjabController extends Controller
         foreach ($dataJabatan['korelasi_jabatan'] as $korelasiJabatan) {
             KorelasiJabatanDiajukan::create([
                 'jabatan_diajukan_id' => $createdJabatan->id,
-                'nama' => $korelasiJabatan['nama'],
+                'jabatan_relasi_id' => $korelasiJabatan['jabatan_relasi_id'],
+                'dalam_hal' => $korelasiJabatan['dalam_hal'],
             ]);
         }
 
         foreach ($dataJabatan['risiko_bahaya'] as $risikoBahaya) {
             RisikoBahayaDiajukan::create([
                 'jabatan_diajukan_id' => $createdJabatan->id,
-                'nama' => $risikoBahaya['nama'],
+                'bahaya_fisik' => $risikoBahaya['bahaya_fisik'],
+                'penyebab' => $risikoBahaya['penyebab'],
             ]);
         }
 
@@ -267,17 +271,17 @@ class AnjabController extends Controller
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Manajer Kepegawaian')->first()->id,
-            'is_approved' => true,
+            'is_approved' => false,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Kepala BUK')->first()->id,
-            'is_approved' => true,
+            'is_approved' => false,
         ]);
         RoleVerifikasi::create([
             'ajuan_id' => $ajuan->id,
             'role_id' => Role::where('name', 'Wakil Rektor 2')->first()->id,
-            'is_approved' => true,
+            'is_approved' => false,
         ]);
 
         $jabatans = JabatanDiajukan::where('ajuan_id', null)->get();
@@ -386,6 +390,7 @@ class AnjabController extends Controller
 
     public function anjabShowJabatan(Ajuan $ajuan, JabatanDiajukan $jabatan)
     {
+        // dd($ajuan);
         $title = 'Lihat Informasi Jabatan';
         $bakat_kerjas = BakatKerja::all();
         $unit_kerjas = UnitKerja::all();
@@ -435,7 +440,7 @@ class AnjabController extends Controller
         $jabatan->update($request->all());
 
         return redirect()
-            ->route('anjab.ajuan.jabatan.edit.2', ['ajuan' => $ajuan->tahun, 'jabatan' => $jabatan])
+            ->route('anjab.ajuan.jabatan.edit.2', ['ajuan' => $ajuan, 'jabatan' => $jabatan])
             ->with('success', 'Data Jabatan berhasil Diubah');
     }
 
