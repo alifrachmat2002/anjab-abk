@@ -132,7 +132,7 @@ new class extends Component {
                                                         </p>
                                                     </div>
                                                     <div class="div">
-                                                        <a href="{{ route('anjab.ajuan.jabatan.edit.1', ['ajuan' => $ajuan->tahun, 'jabatan' => $jabatan->id]) }}"
+                                                        <a href="{{ route('anjab.ajuan.jabatan.edit.1', ['ajuan' => $ajuan, 'jabatan' => $jabatan->id]) }}"
                                                             class="btn btn-sm btn-warning ms-auto add-button"><i
                                                                 class="fa-solid fa-edit"></i> Edit Informasi
                                                             Jabatan</a>

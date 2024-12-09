@@ -46,11 +46,11 @@ Route::prefix('anjab')
                 Route::get('/{tahun}/{id}/edit', [AnjabController::class, 'anjabEdit'])->name('edit');
                 Route::post('/{tahun}/{id}/edit/storeJabatan', [AnjabController::class, 'storeJabatan'])->name('jabatanStore');
                 Route::post('/{ajuan}/update', [AnjabController::class, 'anjabUpdate'])->name('update');
-                Route::get('/{ajuan:tahun}/jabatan/{jabatan}', [AnjabController::class, 'anjabShowJabatan'])->name('jabatan.show');
-                Route::get('/{ajuan:tahun}/jabatan/{jabatan}/edit/1', [AnjabController::class, 'anjabEditJabatan1'])->name('jabatan.edit.1');
-                Route::put('/{ajuan:tahun}/jabatan/{jabatan}/update/1', [AnjabController::class, 'anjabUpdateJabatan1'])->name('jabatan.update.1');
-                Route::get('/{ajuan:tahun}/jabatan/{jabatan}/edit/2', [AnjabController::class, 'anjabEditJabatan2'])->name('jabatan.edit.2');
-                Route::put('/{ajuan:tahun}/jabatan/{jabatan}/update/2', [AnjabController::class, 'anjabUpdateJabatan2'])->name('jabatan.update.2');
+                Route::get('/{ajuan}/jabatan/{jabatan}', [AnjabController::class, 'anjabShowJabatan'])->name('jabatan.show');
+                Route::get('/{ajuan}/jabatan/{jabatan}/edit/1', [AnjabController::class, 'anjabEditJabatan1'])->name('jabatan.edit.1');
+                Route::put('/{ajuan}/jabatan/{jabatan}/update/1', [AnjabController::class, 'anjabUpdateJabatan1'])->name('jabatan.update.1');
+                Route::get('/{ajuan}/jabatan/{jabatan}/edit/2', [AnjabController::class, 'anjabEditJabatan2'])->name('jabatan.edit.2');
+                Route::put('/{ajuan}/jabatan/{jabatan}/update/2', [AnjabController::class, 'anjabUpdateJabatan2'])->name('jabatan.update.2');
                 Route::post('/{ajuan}/verifikasi', [AnjabController::class, 'anjabVerifikasi'])->name('verifikasi');
                 Route::post('/revisi', [AnjabController::class, 'anjabRevisiAjuan'])->name('revisi');
                 Route::post('{ajuan}/revisi-jabatan', [AnjabController::class, 'anjabRevisiJabatan'])->name('jabatan.revisi');
@@ -87,9 +87,8 @@ Route::prefix('anjab')
                     Route::delete('/korelasi-jabatan/{korelasiJabatan}/delete', [KorelasiJabatanController::class, 'deleteKorelasiJabatan'])->name('korelasiJabatan.delete');
                     Route::post('/risiko-bahaya/store', [RisikoBahayaController::class, 'storeRisikoBahaya'])->name('risikoBahaya.store');
                     Route::delete('/risiko-bahaya/{risikoBahaya}/delete', [RisikoBahayaController::class, 'deleteRisikoBahaya'])->name('risikoBahaya.delete');
-                    Route::post('/make-catatan',[JabatanController::class,'anjabMakeCatatan'])->name('makeCatatan');
+                    Route::post('/make-catatan', [JabatanController::class, 'anjabMakeCatatan'])->name('makeCatatan');
                 });
-
             });
     });
 
@@ -106,13 +105,12 @@ Route::prefix('/abk/ajuan')->name('abk.')->group(function () {
     Route::get('/{abk}/unit/{unit_kerja}/jabatan/{abk_jabatan}/edit', [AbkController::class, 'editJabatan'])->name('jabatan.edit');
     Route::put('/{detail_abk}/{abk_jabatan}/store', [AbkController::class, 'storeDetailAbk'])->name('detail_abk.store');
     Route::post('/{abk}/update', [AbkController::class, 'updateAjuan'])->name('ajuan.update');
-    Route::post('/abkjabatan/{abk_jabatan}/make-catatan',[AbkController::class,'abkMakeCatatan'])->name('jabatan.makecatatan');
+    Route::post('/abkjabatan/{abk_jabatan}/make-catatan', [AbkController::class, 'abkMakeCatatan'])->name('jabatan.makecatatan');
     Route::post('/{abk}/revisi', [AbkController::class, 'abkRevisi'])->name('ajuan.revisi');
     Route::post('/{abk}/jabatan/revisi', [AbkController::class, 'abkRevisiJabatan'])->name('jabatan.revisi');
     Route::post('/{abk}/verifikasi', [AbkController::class, 'abkVerifikasi'])->name('ajuan.verifikasi');
     Route::post('/{abk}/parent/verifikasi', [AbkController::class, 'abkParentVerifikasi'])->name('ajuan.parent.verifikasi');
     Route::post('/{abk}/parent/revisi', [AbkController::class, 'abkParentRevisi'])->name('ajuan.parent.revisi');
-
 });
 
 
@@ -190,5 +188,4 @@ Route::prefix('/laporan')
         Route::get('/abk/{tahun}/{anjab}/', [LaporanController::class, 'showABK'])->name('abk');
         Route::get('/abk/{tahun}/{anjab}/laporan', [LaporanController::class, 'showLaporanABK'])->name('abk.laporan');
         Route::get('/abk/{tahun}/{anjab}/laporan/download', [LaporanController::class, 'downloadLaporanABK'])->name('abk.download');
-        
     });

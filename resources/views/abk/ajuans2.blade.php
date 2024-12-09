@@ -108,8 +108,8 @@
                                             @endif
                                         @else
                                             <span class="badge text-bg-danger">Anda sudah merevisi Ajuan ini</span>
-                                            <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
-                                            class="btn btn-outline-primary">Lihat</a>
+                                            {{-- <a href="{{ route('abk.ajuan.show', ['abk' => $ajuan->id]) }}"
+                                            class="btn btn-outline-primary">Lihat</a> --}}
                                         @endif
                                     @endif
                                 @endif
