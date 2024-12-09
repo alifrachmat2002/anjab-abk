@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('jabatan_direvisi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('verifikasi_id')->nullable()->constrained('verifikasi');
-            $table->foreignId('jabatan_diajukan_id')->nullable()->constrained('jabatan_diajukan');
+            $table->foreignId('jabatan_diajukan_id')->nullable()->constrained('jabatan_diajukan')->onDelete('cascade');
             $table->foreignId('abk_jabatan_id')->nullable()->constrained('abk_jabatan')->onDelete('cascade');
             $table->text('catatan')->nullable();
             $table->timestamps();
