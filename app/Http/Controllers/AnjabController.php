@@ -292,7 +292,7 @@ class AnjabController extends Controller
             }
         }
 
-        return redirect()->route('anjab.ajuan.index')->with('success', 'Ajuan Jabatan berhasil diajukan');
+        return redirect()->route('anjab.ajuan.index')->with('success', 'Ajuan Jabatan berhasil dibuat');
     }
 
     public function anjabShow(Ajuan $ajuan, $id)

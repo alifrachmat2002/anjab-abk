@@ -21,10 +21,15 @@
                 <p class="m-0 p-0">Untuk membuat ajuan ABK, silahkan tekan tombol 'Buat Ajuan ABK'</p>
             </div>
         @endif
-        <div class="alert alert-dismissible alert-success fade show">
-            <p class="m-0">Ajuan berhasil disimpan!</p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+
+        {{-- display alert "Ajuan berhasil disimpan" if there is success --}}
+        @if (session('success'))
+            <div class="alert alert-dismissible alert-success fade show">
+                <p class="m-0">{{ session('success') }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        
     @endcan
     <div class="card dropdown-divider mb-3"></div>
     @can('make anjab')
